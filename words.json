@@ -1,0 +1,52 @@
+[
+  {
+    "front": "こんにちは",
+    "back": "안녕하세요",
+    "category": "Japanese"
+  },
+  {
+    "front": "ありがとう",
+    "back": "감사합니다",
+    "category": "Japanese"
+  },
+  {
+    "front": "さようなら",
+    "back": "안녕히 가세요",
+    "category": "Japanese"
+  },
+  {
+    "front": "はい",
+    "back": "네",
+    "category": "Japanese"
+  },
+  {
+    "front": "いいえ",
+    "back": "아니요",
+    "category": "Japanese"
+  },
+  {
+    "front": "Hello",
+    "back": "안녕",
+    "category": "English"
+  },
+  {
+    "front": "Thank you",
+    "back": "감사합니다",
+    "category": "English"
+  },
+  {
+    "front": "Goodbye",
+    "back": "안녕히 가세요",
+    "category": "English"
+  },
+  {
+    "front": "Yes",
+    "back": "네",
+    "category": "English"
+  },
+  {
+    "front": "No",
+    "back": "아니요",
+    "category": "English"
+  }
+]

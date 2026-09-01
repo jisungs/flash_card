@@ -10,9 +10,24 @@
         <h1>Flash Cards</h1>
         <div id="flashcard-container">
             <div class="flashcard">
-                <div class="front">こんにちは</div>
-                <div class="back">안녕하세요</div>
+                <div class="front"></div>
+                <div class="back"></div>
             </div>
+        </div>
+        <div class="progress-wrapper">
+            <div class="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+            <span id="progress">0 / 0</span>
+        </div>
+        <div class="controls">
+            <select id="category-select">
+                <option value="all">All</option>
+                <option value="Japanese">Japanese</option>
+                <option value="English">English</option>
+            </select>
+            <button id="prev-btn">Previous</button>
+            <button id="next-btn">Next</button>
         </div>
         <script src="scripts.js"></script>
     </body>
