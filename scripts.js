@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const back = card.querySelector(".back");
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
+    const shuffleBtn = document.getElementById("shuffle-btn");
     const progress = document.getElementById("progress");
     const progressBar = document.getElementById("progress-bar");
     const categorySelect = document.getElementById("category-select");
@@ -34,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function applyFilter() {
         // 현재 선택된 카테고리에 따라 filteredWords 업데이트
         if (currentCategory === "all") {
-            filteredWords = allWords;
+            filteredWords = [...allWords];
         } else {
             filteredWords = allWords.filter(
                 (word) => word.category === currentCategory,
@@ -42,6 +43,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         currentIndex = 0; // 카테고리 변경 시 첫 번째 카드로 이동
+        updateCard();
+    }
+
+    function shuffleWords() {
+        if (filteredWords.length === 0) return;
+
+        // Fisher-Yates Shuffle Algorithm
+        for (let i = filteredWords.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredWords[i], filteredWords[j]] = [
+                filteredWords[j],
+                filteredWords[i],
+            ];
+        }
+
+        currentIndex = 0;
         updateCard();
     }
 
@@ -73,6 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
         card.classList.toggle("flipped");
     });
 
+    shuffleBtn.addEventListener("click", shuffleWords);
+
     prevBtn.addEventListener("click", () => {
         if (filteredWords.length === 0) return;
         currentIndex =
@@ -89,5 +108,22 @@ document.addEventListener("DOMContentLoaded", () => {
     categorySelect.addEventListener("change", (e) => {
         currentCategory = e.target.value;
         applyFilter();
+    });
+
+    // Keyboard Navigation
+    window.addEventListener("keydown", (e) => {
+        switch (e.key) {
+            case "ArrowLeft":
+                prevBtn.click();
+                break;
+            case "ArrowRight":
+                nextBtn.click();
+                break;
+            case " ":
+            case "Enter":
+                e.preventDefault(); // Space key scroll prevention
+                card.click();
+                break;
+        }
     });
 });

@@ -79,9 +79,27 @@ We are building this project in phases to ensure a solid architectural foundatio
 
 ### [ ] Phase 3: Backend & Persistence (Planned)
 
-- [ ] **Python Backend**: Implement a FastAPI or Flask server for advanced management.
-- [ ] **User Progress Tracking**: Save "Learned" status in a database (SQLite).
-- [ ] **Admin Interface**: A simple UI to add, edit, or delete words via API.
+Transform the application into a dynamic web app with persistent storage.
+
+#### **Step 1: Basic Backend & RESTful API**
+
+- Build a high-performance API using **FastAPI**.
+- Replace local `words.json` with API endpoints for fetching words.
+
+#### **Step 2: Database Integration**
+
+- Implement **SQLite** for persistent data storage.
+- Use **SQLAlchemy** (ORM) to manage database interactions.
+
+#### **Step 3: User Progress Tracking**
+
+- Introduce user-specific learning states (e.g., "Learned", "Review Later").
+- Enable saving progress to the database to support long-term learning.
+
+#### **Step 4: Admin Interface**
+
+- Develop a simple administrative dashboard to manage flashcards (CRUD operations).
+- Implement full Create, Read, Update, and Delete functionality via API.
 
 ---
 
