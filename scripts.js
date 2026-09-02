@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("flashcard-container");
     const card = document.querySelector(".flashcard");
     const front = card.querySelector(".front");
-    const back = card.querySelector(".back");
+    const backText = card.querySelector(".back-text");
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
     const shuffleBtn = document.getElementById("shuffle-btn");
@@ -14,6 +14,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let filteredWords = [];
     let currentIndex = 0;
     let currentCategory = "all";
+
+    const safeParseJSON = (key, defaultValue) => {
+        try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) {
+            console.error(`Error parsing localStorage key ${key}:`, e);
+            return defaultValue;
+        }
+    };
+
+    let knownWords = safeParseJSON("knownWords", []);
+    let unknownWords = safeParseJSON("unknownWords", []);
 
     fetch("words.json")
         .then((response) => {
@@ -35,11 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function applyFilter() {
         // 현재 선택된 카테고리에 따라 filteredWords 업데이트
         if (currentCategory === "all") {
-            filteredWords = [...allWords];
+            filteredWords = allWords.map((word, index) => ({
+                ...word,
+                id: index,
+            }));
         } else {
-            filteredWords = allWords.filter(
-                (word) => word.category === currentCategory,
-            );
+            filteredWords = allWords
+                .filter((word) => word.category === currentCategory)
+                .map((word, index) => ({ ...word, id: index })); // 원본 인덱스 보존을 위해 map 사용
         }
 
         currentIndex = 0; // 카테고리 변경 시 첫 번째 카드로 이동
@@ -65,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateCard() {
         if (filteredWords.length === 0) {
             front.textContent = "";
-            back.textContent = "";
+            backText.textContent = "";
             progress.textContent = "0 / 0";
             progressBar.style.width = "0%";
             return;
@@ -73,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Update text
         front.textContent = filteredWords[currentIndex].front;
-        back.textContent = filteredWords[currentIndex].back;
+        backText.textContent = filteredWords[currentIndex].back;
 
         // Reset flip state
         card.classList.remove("flipped");
@@ -86,8 +102,40 @@ document.addEventListener("DOMContentLoaded", () => {
         progressBar.style.width = `${percentage}%`;
     }
 
-    card.addEventListener("click", () => {
+    card.addEventListener("click", (e) => {
+        if (e.target.classList.contains("control-btn")) return;
         card.classList.toggle("flipped");
+    });
+
+    const correctBtn = document.querySelector(".correct-btn");
+    const incorrectBtn = document.querySelector(".incorrect-btn");
+
+    function markWord(isCorrect) {
+        const wordId = filteredWords[currentIndex].id;
+
+        if (isCorrect) {
+            if (!knownWords.includes(wordId)) knownWords.push(wordId);
+            unknownWords = unknownWords.filter((id) => id !== wordId);
+        } else {
+            if (!unknownWords.includes(wordId)) unknownWords.push(wordId);
+            knownWords = knownWords.filter((id) => id !== wordId);
+        }
+
+        localStorage.setItem("knownWords", JSON.stringify(knownWords));
+        localStorage.setItem("unknownWords", JSON.stringify(unknownWords));
+
+        // Mark 후 자동으로 다음 카드로 이동
+        nextBtn.click();
+    }
+
+    correctBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        markWord(true);
+    });
+
+    incorrectBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        markWord(false);
     });
 
     shuffleBtn.addEventListener("click", shuffleWords);

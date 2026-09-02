@@ -58,6 +58,81 @@ h1 {
     background-color: #a5d6a7;
     color: #333;
     transform: rotateY(180deg);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.overlay-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    border-radius: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+    pointer-events: none;
+    z-index: 9999 !important;
+}
+
+.flashcard.flipped .back:hover .overlay-controls {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.control-btn {
+    width: 60px;
+    height: 60px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: none;
+    z-index: 20;
+}
+
+.control-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.correct-btn,
+.incorrect-btn {
+    background: transparent;
+}
+
+.control-btn:hover {
+    transform: scale(1.2);
+}
+
+.control-btn:active {
+    transform: scale(0.9);
 }
 
 .progress-wrapper {
