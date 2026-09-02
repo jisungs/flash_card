@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const progress = document.getElementById("progress");
     const progressBar = document.getElementById("progress-bar");
     const categorySelect = document.getElementById("category-select");
+    const completionModal = document.getElementById("completion-modal");
+    const completionMessage = document.getElementById("completion-message");
+    const closeModal = document.getElementById("close-modal");
 
     let allWords = [];
     let filteredWords = [];
@@ -52,6 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 ...word,
                 id: index,
             }));
+        } else if (currentCategory === "wrong") {
+            filteredWords = allWords
+                .filter((_, index) => unknownWords.includes(index))
+                .map((word, index) => ({ ...word, id: index }));
         } else {
             filteredWords = allWords
                 .filter((word) => word.category === currentCategory)
@@ -102,6 +109,17 @@ document.addEventListener("DOMContentLoaded", () => {
         progressBar.style.width = `${percentage}%`;
     }
 
+    function showCompletionModal() {
+        const total = filteredWords.length;
+        const knownCount = filteredWords.filter((word) =>
+            knownWords.includes(word.id),
+        ).length;
+        const accuracy = total > 0 ? Math.round((knownCount / total) * 100) : 0;
+
+        completionMessage.textContent = `총 ${total}개의 단어 중 ${knownCount}개를 마스터했습니다! (정확도: ${accuracy}%)`;
+        completionModal.classList.add("show");
+    }
+
     card.addEventListener("click", (e) => {
         if (e.target.classList.contains("control-btn")) return;
         card.classList.toggle("flipped");
@@ -149,8 +167,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nextBtn.addEventListener("click", () => {
         if (filteredWords.length === 0) return;
-        currentIndex = (currentIndex + 1) % filteredWords.length;
+
+        if (currentIndex === filteredWords.length - 1) {
+            showCompletionModal();
+            currentIndex = 0; // 리셋
+        } else {
+            currentIndex = (currentIndex + 1) % filteredWords.length;
+        }
         updateCard();
+    });
+
+    closeModal.addEventListener("click", () => {
+        completionModal.classList.remove("show");
+        applyFilter(); // 리셋 및 재시작
     });
 
     categorySelect.addEventListener("change", (e) => {

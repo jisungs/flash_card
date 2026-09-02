@@ -8,6 +8,13 @@
     </head>
     <body>
         <h1>Flash Cards</h1>
+        <div id="completion-modal" class="modal">
+            <div class="modal-content">
+                <h2>🎉 학습 완료!</h2>
+                <p id="completion-message"></p>
+                <button id="close-modal">다시 학습하기</button>
+            </div>
+        </div>
         <div id="flashcard-container">
             <div class="flashcard">
                 <div class="front"></div>
@@ -39,6 +46,7 @@
         <div class="controls">
             <select id="category-select">
                 <option value="all">All</option>
+                <option value="wrong">Wrong Answers Only</option>
                 <option value="Japanese">Japanese</option>
                 <option value="English">English</option>
             </select>
