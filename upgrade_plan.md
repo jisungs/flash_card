@@ -45,6 +45,23 @@
     - Navbar와 메인 콘텐츠 간의 여백(Spacing) 최적화로 답답함 해소.
     - `styles.css`에 브랜드 컬러가 적용된 Navbar 전용 스타일 추가.
 
+#### 1.5 대시보드-학습 페이지 연동 (Dashboard-Learning Integration) 🆕
+**목표**: 대시보드의 통계 카드를 통해 원하는 학습 모드로 즉시 진입하는 퀵-링크 구현
+
+- **통계 카드 클릭 이벤트 추가**:
+    - **구현**: 대시보드의 3가지 통계 카드(전체, 마스터, 복습)를 클릭 가능한 링크/버튼으로 변경.
+    - **링크 매핑**:
+        - **전체 단어 클릭** $\rightarrow$ `flash_card.html?mode=all` (전체 학습)
+        - **마스터한 단어 클릭** $\rightarrow$ `flash_card.html?mode=known` (마스터 단어 복습)
+        - **복습 필요 클릭** $\rightarrow$ `flash_card.html?mode=wrong` (오답 노트 학습)
+
+- **학습 페이지 필터 자동 적용**:
+    - **구현**: `flash_card.html` 로드 시 URL의 쿼리 스트링(`?mode=...`)을 분석하는 로직 추가.
+    - **로직**: `URLSearchParams`를 사용하여 `mode` 값을 읽고, 그에 맞는 `currentCategory` 설정 및 `applyFilter()` 자동 호출.
+
+- **카드 인터랙션 강화**:
+    - **시각적 효과**: 카드에 `cursor: pointer` 및 호버 시 살짝 떠오르는 효과(`transform: translateY(-5px)`)를 추가하여 클릭 가능함을 명시.
+
 
 - **기능**: 마우스 없이 키보드로 조작 가능
 - **구현 방법**:

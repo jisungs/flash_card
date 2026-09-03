@@ -36,40 +36,47 @@
         </nav>
 
         <main id="main-content">
+            
             <section class="content-section text-center">
                 <h1 class="section-title mb-4">Welcome Back! </h1>
                 <p class="lead mb-5">오늘의 학습을 시작해 보세요. 꾸준한 학습이 실력을 만듭니다.</p>
 
                 <div class="row g-4 mb-5 justify-content-center" style="max-width: 800px;">
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm p-3">
-                            <div class="card-body">
-                                <h5 class="card-title text-muted">전체 단어</h5>
-                                <h2 class="card-text fw-bold text-success" id="stat-total">0</h2>
+                        <a href="flash_card.html?mode=all" class="text-decoration-none">
+                            <div class="card h-100 border-0 shadow-sm p-3 stat-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-muted">전체 단어</h5>
+                                    <h2 class="card-text fw-bold text-success" id="stat-total">0</h2>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm p-3">
-                            <div class="card-body">
-                                <h5 class="card-title text-muted">마스터한 단어</h5>
-                                <h2 class="card-text fw-bold text-primary" id="stat-mastered">0</h2>
+                        <a href="flash_card.html?mode=known" class="text-decoration-none">
+                            <div class="card h-100 border-0 shadow-sm p-3 stat-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-muted">마스터한 단어</h5>
+                                    <h2 class="card-text fw-bold text-primary" id="stat-mastered">0</h2>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm p-3">
-                            <div class="card-body">
-                                <h5 class="card-title text-muted">복습 필요</h5>
-                                <h2 class="card-text fw-bold text-danger" id="stat-wrong">0</h2>
+                        <a href="flash_card.html?mode=wrong" class="text-decoration-none">
+                            <div class="card h-100 border-0 shadow-sm p-3 stat-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-muted">복습 필요</h5>
+                                    <h2 class="card-text fw-bold text-danger" id="stat-wrong">0</h2>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
                 <div class="d-grid gap-2 col-md-4 mx-auto">
                     <a href="flash_card.html" class="btn btn-success btn-lg py-3 shadow">
-                        📖 지금 바로 학습 시작하기
+                         지금 바로 학습 시작하기
                     </a>
                 </div>
             </section>

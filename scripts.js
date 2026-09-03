@@ -52,6 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentIndex = 0;
     let currentCategory = "all";
 
+    // URL 파라미터 확인 (예: ?mode=wrong)
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode = urlParams.get("mode");
+    if (mode) {
+        currentCategory = mode;
+    }
+
     fetch("words.json")
         .then((response) => {
             if (!response.ok) {
@@ -79,6 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (currentCategory === "wrong") {
             filteredWords = allWords
                 .filter((_, index) => unknownWords.includes(index))
+                .map((word, index) => ({ ...word, id: index }));
+        } else if (currentCategory === "known") {
+            filteredWords = allWords
+                .filter((_, index) => knownWords.includes(index))
                 .map((word, index) => ({ ...word, id: index }));
         } else {
             filteredWords = allWords
