@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const statTotal = document.getElementById("stat-total");
     const statMastered = document.getElementById("stat-mastered");
     const statWrong = document.getElementById("stat-wrong");
+    const setSelect = document.getElementById("set-select");
+    const startLearnBtn = document.getElementById("start-learn-btn");
 
     if (statTotal && statMastered && statWrong) {
         fetch("words.json")
@@ -26,8 +28,29 @@ document.addEventListener("DOMContentLoaded", () => {
                 statTotal.textContent = total;
                 statMastered.textContent = knownWords.length;
                 statWrong.textContent = unknownWords.length;
+
+                // 세트 목록 동적 생성
+                if (setSelect) {
+                    const sets = [...new Set(data.map(word => word.set).filter(Boolean))];
+                    sets.forEach(set => {
+                        const option = document.createElement("option");
+                        option.value = set;
+                        option.textContent = set;
+                        setSelect.appendChild(option);
+                    });
+                }
             })
             .catch((error) => console.error("Error fetching words for stats:", error));
+    }
+
+    if (startLearnBtn && setSelect) {
+        startLearnBtn.addEventListener("click", (e) => {
+            const selectedSet = setSelect.value;
+            if (selectedSet !== "all") {
+                e.preventDefault();
+                window.location.href = `flash_card.html?set=${encodeURIComponent(selectedSet)}`;
+            }
+        });
     }
 
     // --- Learning Logic (flash_card.html) ---
@@ -51,12 +74,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let filteredWords = [];
     let currentIndex = 0;
     let currentCategory = "all";
+    let currentSet = "all";
 
-    // URL 파라미터 확인 (예: ?mode=wrong)
+    // URL 파라미터 확인 (예: ?mode=wrong, ?set=기초 일본어)
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get("mode");
+    const setParam = urlParams.get("set");
     if (mode) {
         currentCategory = mode;
+    }
+    if (setParam) {
+        currentSet = setParam;
     }
 
     fetch("words.json")
@@ -77,24 +105,30 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     function applyFilter() {
-        // 현재 선택된 카테고리에 따라 filteredWords 업데이트
+        // 1. 먼저 세트(Set) 필터링 적용
+        let baseWords = allWords;
+        if (currentSet !== "all") {
+            baseWords = allWords.filter(word => word.set === currentSet);
+        }
+
+        // 2. 선택된 카테고리(Category)에 따라 filteredWords 업데이트
         if (currentCategory === "all") {
-            filteredWords = allWords.map((word, index) => ({
+            filteredWords = baseWords.map((word, index) => ({
                 ...word,
-                id: index,
+                id: allWords.indexOf(word), // 원본 allWords의 인덱스를 id로 사용
             }));
         } else if (currentCategory === "wrong") {
-            filteredWords = allWords
-                .filter((_, index) => unknownWords.includes(index))
-                .map((word, index) => ({ ...word, id: index }));
+            filteredWords = baseWords
+                .filter((word) => unknownWords.includes(allWords.indexOf(word)))
+                .map((word) => ({ ...word, id: allWords.indexOf(word) }));
         } else if (currentCategory === "known") {
-            filteredWords = allWords
-                .filter((_, index) => knownWords.includes(index))
-                .map((word, index) => ({ ...word, id: index }));
+            filteredWords = baseWords
+                .filter((word) => knownWords.includes(allWords.indexOf(word)))
+                .map((word) => ({ ...word, id: allWords.indexOf(word) }));
         } else {
-            filteredWords = allWords
+            filteredWords = baseWords
                 .filter((word) => word.category === currentCategory)
-                .map((word, index) => ({ ...word, id: index })); // 원본 인덱스 보존을 위해 map 사용
+                .map((word) => ({ ...word, id: allWords.indexOf(word) }));
         }
 
         currentIndex = 0; // 카테고리 변경 시 첫 번째 카드로 이동

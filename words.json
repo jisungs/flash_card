@@ -2,51 +2,61 @@
   {
     "front": "こんにちは",
     "back": "안녕하세요",
-    "category": "Japanese"
+    "category": "Japanese",
+    "set": "기초 일본어"
   },
   {
     "front": "ありがとう",
     "back": "감사합니다",
-    "category": "Japanese"
+    "category": "Japanese",
+    "set": "기초 일본어"
   },
   {
     "front": "さようなら",
     "back": "안녕히 가세요",
-    "category": "Japanese"
+    "category": "Japanese",
+    "set": "기초 일본어"
   },
   {
     "front": "はい",
     "back": "네",
-    "category": "Japanese"
+    "category": "Japanese",
+    "set": "기초 일본어"
   },
   {
     "front": "いいえ",
     "back": "아니요",
-    "category": "Japanese"
+    "category": "Japanese",
+    "set": "기초 일본어"
   },
   {
     "front": "Hello",
     "back": "안녕",
-    "category": "English"
+    "category": "English",
+    "set": "기초 영어"
   },
   {
     "front": "Thank you",
     "back": "감사합니다",
-    "category": "English"
+    "category": "English",
+    "set": "기초 영어"
   },
   {
     "front": "Goodbye",
     "back": "안녕히 가세요",
-    "category": "English"
+    "category": "English",
+    "set": "기초 영어"
   },
   {
     "front": "Yes",
     "back": "네",
-    "category": "English"
+    "category": "English",
+    "set": "기초 영어"
   },
   {
     "front": "No",
     "back": "아니요",
-    "category": "English"
+    "category": "English",
+    "set": "기초 영어"
   }
 ]
