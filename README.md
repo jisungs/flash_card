@@ -1,124 +1,69 @@
-# 🗂️ Flash Card Project
+# 🗂️ Flash Card Project (학습 일지 및 가이드)
 
-A lightweight, elegant, and intuitive web-based flashcard application designed for language learners. This project provides a smooth learning experience through beautiful CSS 3D animations and efficient data handling.
-
----
-
-## ✨ Overview
-
-**Flash Card Project** is a minimalist tool built to help users master new vocabulary through active recall. By separating data from logic, it offers a scalable foundation for building a robust learning platform.
-
-### 🚀 Key Features
-
-- **✨ 3D Flip Animation**: Smooth, realistic card-flipping effect using CSS 3D transforms.
-- **📂 Dynamic Data Loading**: All flashcard content is loaded dynamically from a `words.json` file.
-- **🔍 Smart Filtering**: Easily switch between different languages or categories.
-- **📊 Real-time Progress**: Track your learning journey with a visual progress bar and counter.
-- **🎨 Clean UX**: A minimalist and distraction-free interface.
+이 프로젝트는 단순한 단어장을 넘어, 사용자가 직접 단어를 외우고 상태를 관리하는 **스마트 플래시카드 앱**으로 발전하고 있습니다. 초보 개발자분들도 이해할 수 있도록 지금까지 어떤 과정을 거쳐 성장했는지 기록했습니다.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 현재까지의 성장 과정 (Progress)
 
-- **Frontend**:
-  - HTML5 (Structure)
-  - CSS3 (3D Animations & Styling)
-  - Vanilla JavaScript (Logic & Data Fetching)
+단순한 '카드 보기' 기능에서 시작해, 현재는 '개인 맞춤형 학습 도구'가 되었습니다.
 
----
-
-## 🚀 How to Use
-
-Since the application fetches data from a JSON file, it needs to be served via a web server to avoid CORS issues.
-
-### Prerequisites
-
-- A web browser (Chrome, Firefox, Edge, etc.)
-- A local web server (e.g., VS Code **Live Server** extension, or Python's built-in server)
-
-### Installation & Running
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/[your-username]/flash-card-project.git
-   ```
-
-2. **Navigate to the project directory:**
-
-   ```bash
-   cd flash-card-project
-   ```
-
-3. **Start a local server:**
-   If you have Python installed, you can simply run:
-
-   ```bash
-   python -m http.server 8000
-   ```
-
-4. **Open in your browser:**
-   Go to `http://localhost:8000` in your browser.
+| 단계 | 목표 | 주요 구현 기능 | 성과 |
+| :--- | :--- | :--- | :--- |
+| **1단계** | **UX/UI 강화** | 키보드 조작, 카드 셔플, 반응형 디자인 | 마우스 없이도 빠르게 학습 가능, 모바일 지원 |
+| **2단계** | **학습 관리** | LocalStorage 저장, 오답 노트, 성취도 리포트 | 내가 모르는 단어만 골라 학습, 학습 결과 확인 |
+| **3단계** | **시스템 확장** | 관리자 UI, Python 서버, 데이터베이스 (진행 예정) | 직접 단어 추가/삭제, 여러 기기에서 데이터 동기화 |
 
 ---
 
-## 📅 Roadmap & Progress
+## 🛠️ 핵심 기능 상세 설명
 
-We are building this project in phases to ensure a solid architectural foundation.
+### 1. 스마트 학습 도구
 
-### [x] Phase 1: Data-driven System (Completed)
+* **카드 셔플 (Shuffle)**: 단어를 무작위로 섞어 순서대로 외우는 나쁜 습관을 방지합니다.
+* **오답 노트 (Wrong Answers Only)**: `✗` 버튼을 누른 단어만 따로 모아 집중적으로 복습할 수 있습니다.
+* **성취도 리포트**: 모든 카드를 학습하면 "총 N개 중 M개를 마스터했습니다!"라는 결과창을 통해 성취감을 줍니다.
 
-- [x] Decouple Data from HTML (JSON integration)
-- [x] Dynamic Rendering of card elements
+### 2. 편리한 인터페이스
 
-### [x] Phase 2: Navigation & UX (Completed)
-
-- [x] Navigation Controls (Previous/Next)
-- [x] Progress Indicator & Progress Bar
-- [x] Category Filtering
-
-### [ ] Phase 3: Backend & Persistence (Planned)
-
-Transform the application into a dynamic web app with persistent storage.
-
-#### **Step 1: Basic Backend & RESTful API**
-
-- Build a high-performance API using **FastAPI**.
-- Replace local `words.json` with API endpoints for fetching words.
-
-#### **Step 2: Database Integration**
-
-- Implement **SQLite** for persistent data storage.
-- Use **SQLAlchemy** (ORM) to manage database interactions.
-
-#### **Step 3: User Progress Tracking**
-
-- Introduce user-specific learning states (e.g., "Learned", "Review Later").
-- Enable saving progress to the database to support long-term learning.
-
-#### **Step 4: Admin Interface**
-
-- Develop a simple administrative dashboard to manage flashcards (CRUD operations).
-- Implement full Create, Read, Update, and Delete functionality via API.
+* **키보드 내비게이션**: `←`, `→` 키로 이동하고 `Space` 키로 카드를 뒤집습니다.
+* **이미지 오버레이**: 카드 뒷면에 마우스를 올리면 나타나는 직관적인 `✓`, `✗` 이미지 버튼을 통해 빠르게 상태를 체크합니다.
 
 ---
 
-## 🎨 Color Scheme
+## 🐛 시행착오 및 해결 방법 (Troubleshooting)
 
-The design uses a calming color palette to minimize eye strain during study sessions:
+개발 과정에서 겪은 문제들과 이를 어떻게 해결했는지 정리했습니다. 초보 개발자분들이 가장 많이 겪는 실수들이니 참고하세요!
 
-| Element | Hex Code |
-| :--- | :--- |
-| **Background** | `#E8F5E9` |
-| **Primary (Color 1)** | `#66BB6A` |
-| **Secondary (Color 2)** | `#A5D6A7` |
-| **Accent (Color 3)** | `#E8F5E9` |
+### 🚨 문제 1: "분명히 버튼을 만들었는데, 카드를 넘기면 사라져요!"
+
+* **원인**: `updateCard()` 함수에서 `back.textContent = "내용"`이라고 작성하면, 기존에 있던 모든 HTML 요소(버튼 등)를 싹 지우고 글자만 넣게 됩니다.
+* **해결책**: 텍스트가 들어갈 전용 공간(`.back-text`)을 따로 만들고, 글자만 그곳에 업데이트하도록 수정했습니다.
+* **교훈**: `textContent`나 `innerHTML`을 사용할 때는 내부 요소가 모두 삭제된다는 점을 주의해야 합니다.
+
+### 🚨 문제 2: "버튼이 화면에 나타나지 않아요!"
+
+* **원인**: 카드가 3D로 뒤집히면서(`rotateY(180deg)`), 내부 요소들의 좌표축이 같이 뒤집혀 브라우저가 요소를 렌더링하지 않거나 다른 요소 뒤에 숨겨버리는 현상이 발생했습니다.
+* **해결책**:
+    1. `z-index`를 아주 높게 설정하여 최상단으로 올렸습니다.
+    2. `visibility: hidden` $\rightarrow$ `visible` 전환을 추가하여 브라우저가 요소를 확실히 그리게 했습니다.
+    3. `.flashcard.flipped .back:hover` 처럼 매우 구체적인 선택자를 사용하여 정확한 시점에만 나타나게 했습니다.
+
+### 🚨 문제 3: "새로고침하면 학습 기록이 다 사라져요!"
+
+* **원인**: 변수에 저장한 데이터는 브라우저를 새로고침하면 초기화됩니다.
+* **해결책**: 브라우저 자체 저장소인 `LocalStorage`를 사용하여 데이터를 저장하고, 페이지 로드 시 다시 불러오는 로직을 구현했습니다.
 
 ---
 
-## 🤝 Contributing
+## 🎨 디자인 가이드
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+| 요소 | 색상/효과 | 의미 |
+| :--- | :--- | :--- |
+| **배경** | `#E8F5E9` | 눈의 피로를 줄이는 연한 초록색 |
+| **정답 버튼** | `check_btn-removebg.png` | 학습 완료 (Known) |
+| **오답 버튼** | `false_btn-removebg.png` | 복습 필요 (Unknown) |
+| **효과** | `cubic-bezier` | 부드럽고 역동적인 카드 뒤집기 애니메이션 |
 
 ---
-*Made with ❤️ for language learners.*
+*이 프로젝트는 실제 학습 경험을 개선하며 성장하고 있습니다. 🚀*

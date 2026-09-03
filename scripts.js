@@ -1,5 +1,39 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // --- Common Logic ---
+    const safeParseJSON = (key, defaultValue) => {
+        try {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) {
+            console.error(`Error parsing localStorage key ${key}:`, e);
+            return defaultValue;
+        }
+    };
+
+    let knownWords = safeParseJSON("knownWords", []);
+    let unknownWords = safeParseJSON("unknownWords", []);
+
+    // --- Dashboard Logic (index.html) ---
+    const statTotal = document.getElementById("stat-total");
+    const statMastered = document.getElementById("stat-mastered");
+    const statWrong = document.getElementById("stat-wrong");
+
+    if (statTotal && statMastered && statWrong) {
+        fetch("words.json")
+            .then((response) => response.json())
+            .then((data) => {
+                const total = data.length;
+                statTotal.textContent = total;
+                statMastered.textContent = knownWords.length;
+                statWrong.textContent = unknownWords.length;
+            })
+            .catch((error) => console.error("Error fetching words for stats:", error));
+    }
+
+    // --- Learning Logic (flash_card.html) ---
     const container = document.getElementById("flashcard-container");
+    if (!container) return; // exit if not on learning page
+
     const card = document.querySelector(".flashcard");
     const front = card.querySelector(".front");
     const backText = card.querySelector(".back-text");
@@ -17,19 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let filteredWords = [];
     let currentIndex = 0;
     let currentCategory = "all";
-
-    const safeParseJSON = (key, defaultValue) => {
-        try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : defaultValue;
-        } catch (e) {
-            console.error(`Error parsing localStorage key ${key}:`, e);
-            return defaultValue;
-        }
-    };
-
-    let knownWords = safeParseJSON("knownWords", []);
-    let unknownWords = safeParseJSON("unknownWords", []);
 
     fetch("words.json")
         .then((response) => {
