@@ -40,6 +40,83 @@ body {
     box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
 }
 
+/* Set Selection Cards - Carousel */
+.set-select-section {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.set-select-section h5 {
+    color: #333;
+}
+
+.set-cards-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 16px;
+    padding: 10px 40px 20px;
+    justify-content: center;
+}
+
+.set-cards-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.set-cards-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.set-card-item {
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+}
+
+.set-card {
+    width: 200px;
+    height: 120px;
+    background: #fff;
+    border: 2px solid #c8e6c9;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.set-card:hover {
+    transform: translateY(-5px);
+    border-color: #66bb6a;
+    box-shadow: 0 8px 24px rgba(102,187,106,0.3);
+}
+
+.set-card:active {
+    transform: translateY(-2px);
+}
+
+.set-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2e7d32;
+    margin-bottom: 6px;
+}
+
+.set-card-count {
+    font-size: 0.85rem;
+    color: #81c784;
+    font-weight: 500;
+}
+
 /* Main Content Centering */
 .content-section {
     flex: 1;

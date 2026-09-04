@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const statTotal = document.getElementById("stat-total");
     const statMastered = document.getElementById("stat-mastered");
     const statWrong = document.getElementById("stat-wrong");
-    const setSelect = document.getElementById("set-select");
-    const startLearnBtn = document.getElementById("start-learn-btn");
+    const setCards = document.getElementById("set-cards");
+    const setCountAll = document.getElementById("set-count-all");
 
     if (statTotal && statMastered && statWrong) {
         fetch("words.json")
@@ -29,18 +29,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 statMastered.textContent = knownWords.length;
                 statWrong.textContent = unknownWords.length;
 
-                // 세트 목록 동적 생성
-                if (setSelect) {
-                    const sets = [
-                        ...new Set(
-                            data.map((word) => word.set).filter(Boolean),
-                        ),
-                    ];
-                    sets.forEach((set) => {
-                        const option = document.createElement("option");
-                        option.value = set;
-                        option.textContent = set;
-                        setSelect.appendChild(option);
+                // 전체 세트 단어 수 표시
+                if (setCountAll) {
+                    setCountAll.textContent = `${total}단어`;
+                }
+
+                // 세트 목록 동적 카드 생성
+                if (setCards) {
+                    const setMap = {};
+                    data.forEach((word) => {
+                        if (word.set) {
+                            setMap[word.set] = (setMap[word.set] || 0) + 1;
+                        }
+                    });
+
+                    Object.entries(setMap).forEach(([setName, count]) => {
+                        const item = document.createElement("div");
+                        item.className = "set-card-item";
+
+                        const card = document.createElement("div");
+                        card.className = "set-card";
+                        card.dataset.set = setName;
+                        card.innerHTML = `
+                            <div class="set-card-title">${setName}</div>
+                            <div class="set-card-count">${count}단어</div>
+                        `;
+                        card.addEventListener("click", () => {
+                            if (setName === "Drama Vocabulary") {
+                                window.location.href = "card_deck.html";
+                            } else {
+                                window.location.href = `flash_card.html?set=${encodeURIComponent(setName)}`;
+                            }
+                        });
+
+                        item.appendChild(card);
+                        setCards.appendChild(item);
                     });
                 }
             })
@@ -49,13 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
             );
     }
 
-    if (startLearnBtn && setSelect) {
-        startLearnBtn.addEventListener("click", (e) => {
-            const selectedSet = setSelect.value;
-            if (selectedSet !== "all") {
-                e.preventDefault();
-                window.location.href = `flash_card.html?set=${encodeURIComponent(selectedSet)}`;
-            }
+    // 전체 세트 카드 클릭 이벤트
+    const allCard = setCards ? setCards.querySelector('[data-set="all"]') : null;
+    if (allCard) {
+        allCard.addEventListener("click", () => {
+            window.location.href = "flash_card.html?mode=all";
         });
     }
 
