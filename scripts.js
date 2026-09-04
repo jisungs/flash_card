@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     card.addEventListener("click", (e) => {
-        if (e.target.classList.contains("control-btn")) return;
+        if (e.target.closest(".control-btn")) return;
         card.classList.toggle("flipped");
     });
 
@@ -289,4 +289,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 break;
         }
     });
+
+    // === 스와이프 제스처 (모바일 터치 지원) ===
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+    const SWIPE_THRESHOLD = 50;
+
+    if (container) {
+        container.addEventListener("touchstart", (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+
+        container.addEventListener("touchend", (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
+                    if (deltaX < 0) {
+                        nextBtn.click();
+                    } else {
+                        prevBtn.click();
+                    }
+                }
+            }
+        }, { passive: true });
+    }
 });

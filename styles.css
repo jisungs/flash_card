@@ -67,6 +67,7 @@ h1 {
     transform-style: preserve-3d;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    touch-action: pan-y;
 }
 
 .flashcard.flipped {
@@ -123,8 +124,8 @@ h1 {
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 20px;
+    justify-content: space-between;
+    padding: 0 15px;
     background-color: rgba(0, 0, 0, 0.5) !important;
     border-radius: 15px;
     opacity: 0;
@@ -136,25 +137,34 @@ h1 {
     z-index: 9999 !important;
 }
 
-.flashcard.flipped .back:hover .overlay-controls {
-    opacity: 1 !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
+.flashcard.flipped .back .overlay-controls {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+@media (hover: hover) {
+    .flashcard.flipped .back .overlay-controls .control-btn:hover {
+        transform: scale(1.15);
+    }
 }
 
 .control-btn {
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
+    min-width: 48px;
+    min-height: 48px;
     background: none;
     border: none;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
     box-shadow: none;
     z-index: 20;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .control-btn img {
@@ -215,8 +225,9 @@ h1 {
 
 select,
 button {
-    padding: 8px 12px;
-    border-radius: 5px;
+    padding: 10px 16px;
+    min-height: 48px;
+    border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 1rem;
     cursor: pointer;
@@ -258,6 +269,8 @@ button:active {
     select,
     button {
         width: 100%;
+        min-height: 48px;
+        padding: 12px 16px;
     }
 }
 

@@ -174,3 +174,6 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+#업그레이드 계획 
+upgrade_plan.md
