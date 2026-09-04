@@ -1,11 +1,190 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Netflix style Card Deck</title>
-</head>
-<body>
-    
-</body>
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Netflix Style Card Deck</title>
+        <style>
+            /* Netflix Dark Theme Styles */
+            :root {
+                --bg-color: #141414;
+                --text-color: #ffffff;
+                --accent-color: #e50914; /* Netflix Red */
+                --transition-speed: 0.3s;
+            }
+
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                overflow-x: hidden;
+            }
+
+            /* Hero Section */
+            .hero {
+                height: 70vh;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                background-image:
+                    linear-gradient(
+                        to right,
+                        rgba(0, 0, 0, 0.8) 0%,
+                        rgba(0, 0, 0, 0) 60%
+                    ),
+                    url("images/drama_thumnail_01.jpg");
+                background-size: cover;
+                background-position: center;
+            }
+
+            .hero-content {
+                padding-left: 5%;
+                max-width: 600px;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+                margin: 0;
+                font-weight: bold;
+            }
+
+            .hero-description {
+                font-size: 1.2rem;
+                margin-top: 20px;
+                line-height: 1.5;
+                color: #cccccc;
+            }
+
+            /* Content Grid */
+            .container {
+                padding: 20px 5%;
+                margin-top: -50px;
+                position: relative;
+                z-index: 10;
+            }
+
+            .content-row-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+                font-weight: bold;
+            }
+
+            .content-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 25px;
+            }
+
+            /* Card Styles */
+            .card-link {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            .card {
+                position: relative;
+                border-radius: 8px;
+                overflow: hidden;
+                transition: transform var(--transition-speed) ease;
+                cursor: pointer;
+            }
+
+            .card:hover {
+                transform: scale(1.05);
+            }
+
+            .card img {
+                width: 100%;
+                height: auto;
+                display: block;
+                border-radius: 8px;
+            }
+
+            .card-overlay {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                padding: 15px;
+                background: linear-gradient(
+                    to top,
+                    rgba(0, 0, 0, 0.9),
+                    transparent
+                );
+                opacity: 0;
+                transition: opacity var(--transition-speed) ease;
+            }
+
+            .card:hover .card-overlay {
+                opacity: 1;
+            }
+
+            .card-title {
+                font-size: 1.1rem;
+                font-weight: bold;
+                margin: 0;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .hero-title {
+                    font-size: 2.5rem;
+                }
+                .content-grid {
+                    grid-template-columns: repeat(
+                        auto-fill,
+                        minmax(160px, 1fr)
+                    );
+                    gap: 15px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">My Collection</h1>
+                <p class="hero-description">
+                    새로운 학습 경험을 시작하세요. 좋아하는 콘텐츠와 관련된
+                    단어를 쉽고 재미있게 학습할 수 있습니다.
+                </p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container">
+            <h2 class="content-row-title">추천 학습 세트</h2>
+
+            <div class="content-grid">
+                <!-- Card 1: Drama Series -->
+                <a href="flash_card.html?content=drama_01" class="card-link">
+                    <div class="card">
+                        <img
+                            src="images/drama_thumnail_01.jpg"
+                            alt="Drama Thumbnail"
+                        />
+                        <div class="card-overlay">
+                            <p class="card-title">Special Drama Series</p>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Placeholder Cards to fill the grid if needed -->
+                <a href="#" class="card-link">
+                    <div
+                        class="card"
+                        style="background-color: #333; height: 200px"
+                    >
+                        <div class="card-overlay">
+                            <p class="card-title">More coming soon...</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </main>
+    </body>
 </html>

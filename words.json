@@ -3,60 +3,98 @@
     "front": "こんにちは",
     "back": "안녕하세요",
     "category": "Japanese",
-    "set": "기초 일본어"
+    "set": "기초 일본어",
+    "contentId": null
   },
   {
     "front": "ありがとう",
     "back": "감사합니다",
     "category": "Japanese",
-    "set": "기초 일본어"
+    "set": "기초 일본어",
+    "contentId": null
   },
   {
     "front": "さようなら",
     "back": "안녕히 가세요",
     "category": "Japanese",
-    "set": "기초 일본어"
+    "set": "기초 일본어",
+    "contentId": null
   },
   {
     "front": "はい",
     "back": "네",
     "category": "Japanese",
-    "set": "기초 일본어"
+    "set": "기초 일본어",
+    "contentId": null
   },
   {
     "front": "いいえ",
     "back": "아니요",
     "category": "Japanese",
-    "set": "기초 일본어"
+    "set": "기초 일본어",
+    "contentId": null
   },
   {
     "front": "Hello",
     "back": "안녕",
     "category": "English",
-    "set": "기초 영어"
+    "set": "기초 영어",
+    "contentId": null
   },
   {
     "front": "Thank you",
     "back": "감사합니다",
     "category": "English",
-    "set": "기초 영어"
+    "set": "기초 영어",
+    "contentId": null
   },
   {
     "front": "Goodbye",
     "back": "안녕히 가세요",
     "category": "English",
-    "set": "기초 영어"
+    "set": "기초 영어",
+    "contentId": null
   },
   {
     "front": "Yes",
     "back": "네",
     "category": "English",
-    "set": "기초 영어"
+    "set": "기초 영어",
+    "contentId": null
   },
   {
     "front": "No",
     "back": "아니요",
     "category": "English",
-    "set": "기초 영어"
+    "set": "기초 영어",
+    "contentId": null
+  },
+  {
+    "front": "Action",
+    "back": "액션",
+    "category": "English",
+    "set": "Drama Vocabulary",
+    "contentId": "drama_01"
+  },
+  {
+    "front": "Scene",
+    "back": "장면",
+    "category": "English",
+    "set": "Drama Vocabulary",
+    "contentId": "drama_01"
+  },
+  {
+    "front": "Actor",
+    "back": "배우",
+    "category": "English",
+    "set": "Drama Vocabulary",
+    "contentId": "drama_01"
+  },
+  {
+    "front": "Script",
+    "back": "대본",
+    "category": "English",
+    "set": "Drama Vocabulary",
+    "contentId": "drama_01"
   }
 ]

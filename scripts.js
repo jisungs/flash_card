@@ -31,8 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // 세트 목록 동적 생성
                 if (setSelect) {
-                    const sets = [...new Set(data.map(word => word.set).filter(Boolean))];
-                    sets.forEach(set => {
+                    const sets = [
+                        ...new Set(
+                            data.map((word) => word.set).filter(Boolean),
+                        ),
+                    ];
+                    sets.forEach((set) => {
                         const option = document.createElement("option");
                         option.value = set;
                         option.textContent = set;
@@ -40,7 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
             })
-            .catch((error) => console.error("Error fetching words for stats:", error));
+            .catch((error) =>
+                console.error("Error fetching words for stats:", error),
+            );
     }
 
     if (startLearnBtn && setSelect) {
@@ -75,16 +81,23 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentIndex = 0;
     let currentCategory = "all";
     let currentSet = "all";
+    let currentContent = "all"; // 추가
 
-    // URL 파라미터 확인 (예: ?mode=wrong, ?set=기초 일본어)
+    // URL 파라미터 확인 (예: ?mode=wrong, ?set=기초 일본어, ?content=drama_01)
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get("mode");
     const setParam = urlParams.get("set");
+    const contentParam = urlParams.get("content"); // 추가
+
     if (mode) {
         currentCategory = mode;
     }
     if (setParam) {
         currentSet = setParam;
+    }
+    if (contentParam) {
+        // 추가
+        currentContent = contentParam;
     }
 
     fetch("words.json")
@@ -108,10 +121,17 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1. 먼저 세트(Set) 필터링 적용
         let baseWords = allWords;
         if (currentSet !== "all") {
-            baseWords = allWords.filter(word => word.set === currentSet);
+            baseWords = allWords.filter((word) => word.set === currentSet);
         }
 
-        // 2. 선택된 카테고리(Category)에 따라 filteredWords 업데이트
+        // 2. 콘텐츠(Content) 필터링 적용 (추가)
+        if (currentContent !== "all") {
+            baseWords = baseWords.filter(
+                (word) => word.contentId === currentContent,
+            );
+        }
+
+        // 3. 선택된 카테고리(Category)에 따라 filteredWords 업데이트
         if (currentCategory === "all") {
             filteredWords = baseWords.map((word, index) => ({
                 ...word,
