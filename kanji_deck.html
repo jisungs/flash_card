@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>한자 획순 연습 - Flash Card</title>
+        <!-- Bootstrap 5 CSS 연결 -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+        <!-- HanziWriter 라이브러리 -->
+        <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3/dist/hanzi-writer.min.js"></script>
+        <style>
+            :root {
+                --bg-color: #e8f5e9;
+                --text-color: #333333;
+                --accent-color: #66bb6a;
+                --secondary-color: #a5d6a7;
+                --card-bg: #ffffff;
+                --transition-speed: 0.3s;
+            }
+
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Hero Section */
+            .practice-hero {
+                background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+                color: white;
+                padding: 30px 0 80px;
+                text-align: center;
+                border-bottom-left-radius: 50px;
+                border-bottom-right-radius: 50px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+            .hero-title {
+                color: white;
+                font-size: 2.5rem;
+                font-weight: 800;
+                margin-bottom: 10px;
+            }
+
+            /* Main Practice Area */
+            .practice-container {
+                margin-top: -60px;
+                padding: 0 10px 30px;
+            }
+
+            .writing-card {
+                background: var(--card-bg);
+                border-radius: 30px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+                padding: 40px;
+                max-width: 600px;
+                margin: 0 auto;
+                text-align: center;
+                transition: transform var(--transition-speed) ease;
+            }
+
+            /* HanziWriter Target */
+            #character-target-div {
+                margin: 0 auto 30px;
+                border: 2px solid var(--bg-color);
+                border-radius: 15px;
+                display: inline-block;
+                background-color: #fff;
+                cursor: crosshair;
+            }
+
+            .char-info {
+                margin-bottom: 30px;
+            }
+
+            .char-main {
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--accent-color);
+            }
+
+            .char-sub {
+                font-size: 1.2rem;
+                color: #666;
+            }
+
+            /* Controls */
+            .control-group {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-bottom: 30px;
+            }
+
+            .btn-practice {
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+                transition: all var(--transition-speed);
+                border: 2px solid var(--accent-color);
+            }
+
+            .btn-animate {
+                background-color: var(--accent-color);
+                color: white;
+            }
+
+            .btn-animate:hover {
+                background-color: #55a655;
+                color: white;
+                transform: translateY(-2px);
+            }
+
+            .btn-quiz {
+                background-color: white;
+                color: var(--accent-color);
+            }
+
+            .btn-quiz:hover {
+                background-color: var(--bg-color);
+                transform: translateY(-2px);
+            }
+
+            /* Status Message */
+            #status-msg {
+                min-height: 24px;
+                font-weight: 500;
+                color: #d32f2f;
+                margin-bottom: 20px;
+                font-size: 0.95rem;
+            }
+
+            /* Progress Bar */
+            .progress-wrapper {
+                max-width: 600px;
+                margin: 0 auto 20px;
+            }
+
+            .progress-text {
+                text-align: right;
+                font-size: 0.9rem;
+                color: #666;
+                margin-bottom: 5px;
+            }
+
+            /* Deck Navigation */
+            .deck-nav {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 30px;
+            }
+
+            .deck-btn {
+                width: 45px;
+                height: 45px;
+                border-radius: 10px;
+                border: 1px solid var(--secondary-color);
+                background: white;
+                font-weight: bold;
+                transition: all var(--transition-speed);
+            }
+
+            .deck-btn.active {
+                background: var(--accent-color);
+                color: white;
+                border-color: var(--accent-color);
+                transform: scale(1.1);
+            }
+
+            @media (max-width: 576px) {
+                .hero-title { font-size: 1.8rem; }
+                .writing-card { padding: 20px; }
+                .btn-practice { width: 100%; }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation Bar (Consistent with Project) -->
+        <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">FlashCard</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">홈</a></li>
+                        <li class="nav-item"><a class="nav-link" href="card_deck.html">콘텐츠 선택</a></li>
+                        <li class="nav-item"><a class="nav-link" href="flash_card.html">단어 학습</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="kanji_deck.html">한자 연습</a></li>
+                        <li class="nav-item"><a class="nav-link" href="login.html">로그인</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <!-- Hero Section -->
+            <header class="practice-hero">
+                <div class="container">
+                    <h1 class="hero-title">Kanji Writing</h1>
+                    <p>정확한 획순으로 한자를 익혀보세요</p>
+                </div>
+            </header>
+
+            <!-- Practice Area -->
+            <div class="practice-container">
+                <div class="progress-wrapper">
+                    <div class="progress-text" id="progress-text">1 / 5</div>
+                    <div class="progress" style="height: 10px; border-radius: 5px;">
+                        <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 20%"></div>
+                    </div>
+                </div>
+
+                <div class="writing-card">
+                    <div class="char-info">
+                        <div class="char-main" id="char-display">私</div>
+                        <div class="char-sub" id="char-meaning">わたし · 나</div>
+                    </div>
+
+                    <div id="character-target-div"></div>
+
+                    <div id="status-msg"></div>
+
+                    <div class="control-group">
+                        <button id="btn-animate" class="btn-practice btn-animate">획순 보기</button>
+                        <button id="btn-quiz" class="btn-practice btn-quiz">직접 써보기</button>
+                        <button id="btn-reset" class="btn-practice btn-quiz">초기화</button>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button id="btn-prev" class="btn btn-outline-secondary btn-sm rounded-pill px-3">이전 글자</button>
+                        <button id="btn-next" class="btn btn-success btn-sm rounded-pill px-3">다음 글자</button>
+                    </div>
+                </div>
+
+                <div class="deck-nav" id="deck-nav">
+                    <!-- Kanji buttons will be injected here -->
+                </div>
+            </div>
+        </main>
+
+        <script>
+            // 1. Kanji Data
+            const kanjiDeck = [
+                { char: "私", reading: "わたし", meaning: "나" },
+                { char: "学", reading: "がく", meaning: "배우다" },
+                { char: "校", reading: "こう", meaning: "학교" },
+                { char: "水", reading: "みず", meaning: "물" },
+                { char: "山", reading: "やま", meaning: "산" },
+                { char: "日", reading: "ひ", meaning: "날/해" },
+                { char: "本", reading: "ほん", meaning: "책/근본" },
+            ];
+
+            let currentIndex = 0;
+            let writer = null;
+
+            // 2. Japanese Data Loader
+            function loadJapaneseCharData(char, onLoad, onError) {
+                fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${encodeURIComponent(char)}.json`)
+                    .then((res) => {
+                        if (!res.ok) throw new Error("데이터 없음: " + char);
+                        return res.json();
+                    })
+                    .then(onLoad)
+                    .catch(onError);
+            }
+
+            function updateUI() {
+                const card = kanjiDeck[currentIndex];
+                document.getElementById("char-display").textContent = card.char;
+                document.getElementById("char-meaning").textContent = `${card.reading} · ${card.meaning}`;
+                document.getElementById("status-msg").textContent = "";
+
+                // Progress
+                const progress = ((currentIndex + 1) / kanjiDeck.length) * 100;
+                document.getElementById("progress-bar").style.width = `${progress}%`;
+                document.getElementById("progress-text").textContent = `${currentIndex + 1} / ${kanjiDeck.length}`;
+
+                // Writer
+                if (writer) {
+                    writer.setCharacter(card.char);
+                } else {
+                    writer = HanziWriter.create("character-target-div", card.char, {
+                        width: 250,
+                        height: 250,
+                        padding: 15,
+                        strokeAnimationSpeed: 1,
+                        delayBetweenStrokes: 300,
+                        showOutline: true,
+                        charDataLoader: loadJapaneseCharData,
+                    });
+                }
+                renderDeckNav();
+            }
+
+            function renderDeckNav() {
+                const nav = document.getElementById("deck-nav");
+                nav.innerHTML = "";
+                kanjiDeck.forEach((card, i) => {
+                    const btn = document.createElement("button");
+                    btn.textContent = card.char;
+                    btn.className = `deck-btn ${i === currentIndex ? 'active' : ''}`;
+                    btn.onclick = () => {
+                        currentIndex = i;
+                        updateUI();
+                    };
+                    nav.appendChild(btn);
+                });
+            }
+
+            // Event Listeners
+            document.getElementById("btn-animate").onclick = () => {
+                if (!writer) return;
+                document.getElementById("status-msg").style.color = "#66bb6a";
+                document.getElementById("status-msg").textContent = "획순 애니메이션 재생 중...";
+                writer.animateCharacter({
+                    onComplete: () => {
+                        document.getElementById("status-msg").textContent = "애니메이션 완료!";
+                    }
+                });
+            };
+
+            document.getElementById("btn-quiz").onclick = () => {
+                if (!writer) return;
+                document.getElementById("status-msg").style.color = "#333";
+                document.getElementById("status-msg").textContent = "직접 그려보세요!";
+                writer.quiz({
+                    onCorrectStroke: (s) => {
+                        document.getElementById("status-msg").style.color = "#66bb6a";
+                        document.getElementById("status-msg").textContent = `잘했어요! (${s.strokeNum + 1}획 완료)`;
+                    },
+                    onMistake: () => {
+                        document.getElementById("status-msg").style.color = "#d32f2f";
+                        document.getElementById("status-msg").textContent = "다시 시도해보세요.";
+                    },
+                    onComplete: (summary) => {
+                        document.getElementById("status-msg").style.color = "#66bb6a";
+                        document.getElementById("status-msg").textContent = `완성! 실수 횟수: ${summary.totalMistakes}`;
+                    }
+                });
+            };
+
+            document.getElementById("btn-reset").onclick = () => {
+                if (!writer) return;
+                writer.showCharacter();
+                document.getElementById("status-msg").textContent = "";
+            };
+
+            document.getElementById("btn-prev").onclick = () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateUI();
+                }
+            };
+
+            document.getElementById("btn-next").onclick = () => {
+                if (currentIndex < kanjiDeck.length - 1) {
+                    currentIndex++;
+                    updateUI();
+                } else {
+                    alert("모든 한자를 학습하셨습니다! 정말 대단해요! 🎉");
+                }
+            };
+
+            // Initial Load
+            updateUI();
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>

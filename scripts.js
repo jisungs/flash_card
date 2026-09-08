@@ -55,11 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="set-card-count">${count}단어</div>
                         `;
                         card.addEventListener("click", () => {
-                            if (setName === "Drama Vocabulary") {
-                                window.location.href = "card_deck.html";
-                            } else {
-                                window.location.href = `flash_card.html?set=${encodeURIComponent(setName)}`;
-                            }
+                            window.location.href = `flash_card.html?set=${encodeURIComponent(setName)}`;
                         });
 
                         item.appendChild(card);
@@ -172,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .map((word) => ({ ...word, id: allWords.indexOf(word) }));
         }
 
-        currentIndex = 0; // 카테고리 변경 시 첫 번째 카드로 이동
+        currentIndex = 0; // 카테고리 변경 시 첫 번째 카드로 
         updateCard();
     }
 

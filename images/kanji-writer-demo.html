@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한자 획순 학습 데모 - HanziWriter.js</title>
+
+<!-- STEP 1: HanziWriter 라이브러리를 CDN에서 불러옵니다. 설치/빌드 과정 없이 이 한 줄이면 끝입니다. -->
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3/dist/hanzi-writer.min.js"></script>
+
+<style>
+  :root {
+    --ink: #1c1c1c;
+    --paper: #faf7f2;
+    --accent: #b23b3b;
+    --line: #ddd6cb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Noto Sans KR", "Hiragino Kaku Gothic ProN", sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+  }
+  .app {
+    width: 100%;
+    max-width: 480px;
+  }
+  h1 {
+    font-size: 20px;
+    margin: 0 0 4px;
+  }
+  p.sub {
+    color: #6b6459;
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+  }
+  #character-target-div {
+    margin: 0 auto 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    display: inline-block;
+  }
+  .meta {
+    font-size: 14px;
+    color: #6b6459;
+    margin-bottom: 20px;
+  }
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  button {
+    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+  }
+  button.primary {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  #status {
+    min-height: 20px;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .deck {
+    margin-top: 24px;
+  }
+  .deck-title {
+    font-size: 13px;
+    color: #6b6459;
+    margin-bottom: 8px;
+  }
+  .deck-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .deck-list button {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+    padding: 0;
+  }
+  .deck-list button.active {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <h1>한자 획순 학습 데모</h1>
+  <p class="sub">HanziWriter.js + hanzi-writer-data-jp 연동 예시</p>
+
+  <div class="card">
+    <!-- STEP 2: 한자를 그릴 빈 컨테이너. 크기는 JS에서 지정하므로 CSS는 최소한만 -->
+    <div id="character-target-div"></div>
+
+    <div class="meta" id="char-label">현재 글자: 私</div>
+    <div id="status"></div>
+
+    <div class="btn-row">
+      <button id="btn-animate" class="primary">획순 보기</button>
+      <button id="btn-quiz">직접 써보기</button>
+      <button id="btn-reset">다시 시작</button>
+    </div>
+
+    <div class="deck">
+      <div class="deck-title">플래시카드 목록 (클릭해서 전환)</div>
+      <div class="deck-list" id="deck-list"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------------------------------------------------------
+  // STEP 6에서 말한 "기존 플래시카드 데이터"라고 생각하면 됩니다.
+  // 실제 프로젝트에서는 이 배열을 서버/DB에서 받아온 학습 카드 목록으로 교체하면 됩니다.
+  // ---------------------------------------------------------
+  const flashcards = [
+    { char: "私", reading: "わたし", meaning: "나" },
+    { char: "学", reading: "がく", meaning: "배우다" },
+    { char: "校", reading: "こう", meaning: "학교" },
+    { char: "水", reading: "みず", meaning: "물" },
+    { char: "山", reading: "やま", meaning: "산" },
+  ];
+
+  let currentIndex = 0;
+  let writer = null;
+
+  // STEP 3: 일본어 전용 획순 데이터를 불러오는 함수.
+  // 이 charDataLoader가 없으면 HanziWriter 기본값(중국어 획순 데이터)이 로드됩니다.
+  function loadJapaneseCharData(char, onLoad, onError) {
+    fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data-jp@0/${encodeURIComponent(char)}.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error("데이터 없음: " + char);
+        return res.json();
+      })
+      .then(onLoad)
+      .catch(onError);
+  }
+
+  function setStatus(text) {
+    document.getElementById("status").textContent = text;
+  }
+
+  function renderDeck() {
+    const deckList = document.getElementById("deck-list");
+    deckList.innerHTML = "";
+    flashcards.forEach((card, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = card.char;
+      btn.className = i === currentIndex ? "active" : "";
+      btn.onclick = () => loadCard(i);
+      deckList.appendChild(btn);
+    });
+  }
+
+  function loadCard(index) {
+    currentIndex = index;
+    const card = flashcards[index];
+    document.getElementById("char-label").textContent =
+      `현재 글자: ${card.char} (${card.reading} · ${card.meaning})`;
+    setStatus("");
+
+    if (writer) {
+      // 이미 만들어진 인스턴스가 있으면 재생성하지 않고 글자만 교체합니다.
+      writer.setCharacter(card.char);
+    } else {
+      // 최초 1회만 HanziWriter 인스턴스를 생성합니다.
+      writer = HanziWriter.create("character-target-div", card.char, {
+        width: 220,
+        height: 220,
+        padding: 12,
+        strokeAnimationSpeed: 1,
+        delayBetweenStrokes: 300,
+        showOutline: true,
+        charDataLoader: loadJapaneseCharData, // <- STEP 3의 핵심 연결부
+      });
+    }
+    renderDeck();
+  }
+
+  // STEP 4: 획순 애니메이션 재생
+  document.getElementById("btn-animate").onclick = () => {
+    if (!writer) return;
+    setStatus("획순을 재생합니다...");
+    writer.animateCharacter({
+      onComplete: () => setStatus("애니메이션 완료!"),
+    });
+  };
+
+  // STEP 5: 사용자가 직접 써보는 퀴즈 모드
+  document.getElementById("btn-quiz").onclick = () => {
+    if (!writer) return;
+    setStatus("이제 직접 획을 그려보세요.");
+    writer.quiz({
+      onCorrectStroke: (strokeData) => {
+        setStatus(`잘했어요! (${strokeData.strokeNum + 1}획 완료)`);
+      },
+      onMistake: () => {
+        setStatus("이 획은 다시 시도해보세요.");
+      },
+      onComplete: (summary) => {
+        setStatus(`완성! 총 실수 횟수: ${summary.totalMistakes}`);
+      },
+    });
+  };
+
+  document.getElementById("btn-reset").onclick = () => {
+    if (!writer) return;
+    writer.showCharacter();
+    setStatus("");
+  };
+
+  // 초기 로드
+  loadCard(0);
+</script>
+
+</body>
+</html>
