@@ -179,3 +179,9 @@ pyrightconfig.json
 upgrade_plan.md
 plans/
 회원가입페이지_기획서.md
+# macOS
+.DS_Store
+
+# 임시 테스트 파일
+test.txt
+test_tag.html

@@ -285,10 +285,12 @@ document.addEventListener("DOMContentLoaded", () => {
         applyFilter(); // 리셋 및 재시작
     });
 
-    categorySelect.addEventListener("change", (e) => {
-        currentCategory = e.target.value;
-        applyFilter();
-    });
+    if (categorySelect) {
+        categorySelect.addEventListener("change", (e) => {
+            currentCategory = e.target.value;
+            applyFilter();
+        });
+    }
 
     // Keyboard Navigation
     window.addEventListener("keydown", (e) => {

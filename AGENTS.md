@@ -23,15 +23,16 @@ python3 -m http.server 8000
 | `flash_card.html` | 핵심 학습 페이지. URL 파라미터로 모드 분기 |
 | `card_deck.html` | 넷플릭스 스타일 콘텐츠(드라마) 선택 화면 |
 | `kanji_deck.html` | 한자 획순 연습 (HanziWriter + `hanzi-writer-data-jp` CDN) |
-| `login.html` / `logout.html` | 데모 로그인/로그아웃 (하드코딩된 자격증명) |
+| `login.html` / `logout.html` / `forgot-password.html` | 데모 인증 페이지 (하드코딩된 자격증명, 실제 세션 없음) |
 | `sign_up.html` | 5단계 회원가입 온보딩 (기획서 `plans/회원가입페이지_기획서.md` 기반, 저장 로직 없음) |
 | `scripts.js` | 모든 동적 로직 담당 (학습 페이지 대시보드 2개 용도) |
 | `styles.css` | 공통 스타일 + `:root` 디자인 토큰 (`--bg-color`, `--accent-color` 등) |
-| `auth.css` | 로그인/로그아웃/회원가입 공통 스타일 (`auth-*` 클래스). `styles.css` 뒤에 로드 |
+| `auth.css` | 인증 페이지(login/logout/sign_up/forgot-password) 공통 스타일 (`auth-*` 클래스). `styles.css` 뒤에 로드 |
 | `words.json` | 단어 데이터 소스 |
+| `kanji-writer-demo.html` / `KANJI_WRITER_GUIDE.md` | 한자 연습용 데모/가이드 문서 (루트에 위치) |
 | `main.py` | 백엔드 골격 자리 (`print('hello world')`만 존재) |
 | `upgrade_plan.md` / `plans/` | 구현·미래 개선 계획 문서 (SRS 알고리즘, DB, 구독 등은 계획만 존재) |
-| `images/` | ✓/✗ 버튼 PNG, 콘텐츠 썸네일 등 |
+| `images/` | ✓/✗ 버튼 PNG, 콘텐츠 썸네일 등 (문서 파일 없음) |
 
 ## 데이터 흐름
 
@@ -57,16 +58,18 @@ python3 -m http.server 8000
 - 담당·모바일 입력: 키보드(`←`/`→`/`Space`), 좌우 스와이프
 - 카드 뒷면 ✓/✗ 오버레이 버튼 → 정답/오답 기록 후 자동으로 다음 카드로 이동
 - 오답 노트: `flash_card.html?mode=wrong`
+- 네비게이션: 모든 페이지(메인 4종)에 공통 navbar — 홈/콘텐츠/단어/한자/오답노트/회원가입/로그인/로그아웃. 오답노트는 항상 `flash_card.html?mode=wrong`을 가리킨다
 
 ## 주의사항 및 잔여 작업
 
 - `main.py`가 비어 있고 로그인·회원가입은 모두 프런트 훼이크로만 동작 (DB/세션 없음). 계획은 `upgrade_plan.md`에 정리됨.
-- 인증 페이지(login/logout/sign_up)는 `styles.css` + `auth.css`만 로드하며 인라인 `<style>` 없음. 배경 그린 `--bg-color` 상속, navbar 없음(집중형 레이아웃 유지). sign_up은 JS가 참조하는 `.step`/`.select-card`/`.tag`/`.btn` 클래스명을 유지해야 한다.
-- `login.html`의 링크 일부가 존재하지 않는 파일(`signup.html`, `forgot-password.html`)을 가리킨다.
-- `styles.css\`` (백틱이 붙은 파일)은 오타로 보이는 중복 파일 → 삭제 대상.
-- `scripts.js`는 학습 페이지와 대시보드 로직이 한 파일에 공존하며, `#flashcard-container` 존재 여부로 분기한다.
+- 인증 페이지(login/logout/sign_up/forgot-password)는 `styles.css` + `auth.css`만 로드하며 인라인 `<style>` 없음. 배경 그린 `--bg-color` 상속, navbar 없음(집중형 레이아웃 유지). sign_up은 JS가 참조하는 `.step`/`.select-card`/`.tag`/`.btn` 클래스명을 유지해야 한다.
+- `scripts.js`는 학습 페이지와 대시보드 로직이 한 파일에 공존하며, `#flashcard-container` 존재 여부로 분기한다. `#category-select` 요소가 없으므로 해당 리스너는 null 가드로 감싸져 있다 (키보드/스와이프의 하위 등록을 지키기 위함).
+- `.DS_Store`, `test.txt`, `test_tag.html`은 git에서 제거·무시 처리됨 (`.gitignore` 참고). `plans/`·`upgrade_plan.md`는 커밋되어 추적 중이지만 `.gitignore`에도 명시되어 있어 혼동 주의.
+- `login.html`의 회원가입 버튼은 `sign_up.html`을, 비밀번호 찾기는 `forgot-password.html`을 가리킨다.
 
 ## 커밋 컨벤션
 
 - 한국어로 메시지 작성, 최근 커밋은 짧은 요약형 (예: "login logout 페이지 nav bar 제거").
-- 병합된 `styles.css\`` 같은 임시/오타 파일은 커밋 전 정리.
+- 임시/오타 파일(백틱이 붙은 파일명 등)은 커밋 전 정리.
+- `.DS_Store` 등 불필요한 바이너리는 커밋에 포함하지 않는다.
