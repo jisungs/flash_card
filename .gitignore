@@ -177,3 +177,5 @@ pyrightconfig.json
 
 #업그레이드 계획 
 upgrade_plan.md
+plans/
+회원가입페이지_기획서.md
