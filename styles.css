@@ -1,5 +1,17 @@
+:root {
+    --bg-color: #e8f5e9;
+    --text-color: #333333;
+    --accent-color: #66bb6a;
+    --accent-hover: #4caf50;
+    --secondary-color: #a5d6a7;
+    --deep-green: #2e7d32;
+    --line-color: #c8e6c9;
+    --card-bg: #ffffff;
+    --transition-speed: 0.3s;
+}
+
 body {
-    background-color: #e8f5e9;
+    background-color: var(--bg-color);
     margin: 0;
     font-family: sans-serif;
     display: flex;

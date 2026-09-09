@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랭카드 - 회원가입</title>
+    <!-- Fonts -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Progress Bar -->
+            <div class="auth-progress">
+                <div class="auth-progress-bar">
+                    <div id="progress-fill" class="auth-progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Step 1: Login Method Selection -->
+            <div id="step-1" class="step active">
+                <h1>매일 조금씩,<br>함께 성장해요</h1>
+                <p class="auth-sub">랭카드와 함께 외국어 학습을 시작해보세요</p>
+
+                <div id="social-buttons">
+                    <!-- Dynamically injected based on region -->
+                </div>
+
+                <div class="auth-divider">또는</div>
+
+                <a href="javascript:void(0)" id="email-signup-link" class="auth-email-link">이메일로 가입하기</a>
+
+                <p class="auth-footer-links">
+                    이미 계정이 있으신가요? <a href="login.html">로그인</a>
+                </p>
+            </div>
+
+            <!-- Step 2: Basic Info (Email only) -->
+            <div id="step-2" class="step">
+                <h1>기본 정보 입력</h1>
+                <p class="auth-sub">활동하실 계정 정보와 닉네임을 입력해주세요</p>
+
+                <div class="auth-form-group">
+                    <label>아이디 (ID)</label>
+                    <div class="auth-input-wrapper">
+                        <input type="text" id="input-id" class="auth-input" placeholder="영문, 숫자 조합 4~12자">
+                    </div>
+                    <div id="error-id" class="auth-error"><span>⚠</span> 사용 가능한 아이디를 입력해주세요.</div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label>닉네임</label>
+                    <div class="auth-input-wrapper">
+                        <input type="text" id="input-nickname" class="auth-input" placeholder="커뮤니티에서 사용할 이름">
+                    </div>
+                    <div id="error-nickname" class="auth-error"><span>⚠</span> 중복된 닉네임입니다.</div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label>이메일</label>
+                    <div class="auth-input-wrapper">
+                        <input type="email" id="input-email" class="auth-input" placeholder="example@email.com">
+                    </div>
+                    <div id="error-email" class="auth-error"><span>⚠</span> 올바른 이메일 형식이 아닙니다.</div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label>비밀번호</label>
+                    <div class="auth-input-wrapper">
+                        <input type="password" id="input-pw" class="auth-input" placeholder="8자 이상 입력해주세요">
+                        <span class="auth-password-toggle" id="toggle-pw">👁</span>
+                    </div>
+                    <div id="error-pw" class="auth-error"><span>⚠</span> 비밀번호는 8자 이상이어야 합니다.</div>
+                </div>
+
+                <div class="auth-form-group">
+                    <label>비밀번호 확인</label>
+                    <div class="auth-input-wrapper">
+                        <input type="password" id="input-pw-confirm" class="auth-input" placeholder="비밀번호를 다시 입력해주세요">
+                    </div>
+                    <div id="error-pw-confirm" class="auth-error"><span>⚠</span> 비밀번호가 일치하지 않습니다.</div>
+                </div>
+
+                <button class="btn btn-primary" id="btn-to-step3">다음 단계로</button>
+                <button class="btn btn-back" id="btn-back-to-1">이전 단계로</button>
+            </div>
+
+            <!-- Step 3: Language & Goals -->
+            <div id="step-3" class="step">
+                <h1>학습 설정</h1>
+                <p class="auth-sub">본인에게 꼭 맞는 학습 환경을 만들어 드릴게요</p>
+
+                <div class="auth-field-title">어떤 언어를 배우고 싶으세요?</div>
+                <div class="auth-selection-grid" id="lang-grid">
+                    <div class="select-card" data-lang="jp">
+                        <span class="emoji">🇯🇵</span>
+                        <span class="label">일본어</span>
+                    </div>
+                    <div class="select-card" data-lang="ko">
+                        <span class="emoji">🇰🇷</span>
+                        <span class="label">한국어</span>
+                    </div>
+                </div>
+
+                <div class="auth-field-title">학습 목표를 골라주세요 (복수 선택 가능)</div>
+                <div class="auth-tag-container" id="goal-tags">
+                    <div class="tag">일드/애니 자막 없이 보기</div>
+                    <div class="tag">한자 정복하기</div>
+                    <div class="tag">자격증/시험 대비</div>
+                    <div class="tag">여행 회화</div>
+                    <div class="tag">커뮤니티 친구 만들기</div>
+                </div>
+
+                <div class="auth-field-title">현재 실력은 어느 정도인가요? (선택)</div>
+                <div class="auth-level-options">
+                    <label class="auth-level-item"><input type="radio" name="level" value="begin"> 이제 시작해요</label>
+                    <label class="auth-level-item"><input type="radio" name="level" value="basic"> 기초는 알아요</label>
+                    <label class="auth-level-item"><input type="radio" name="level" value="mid"> 어느 정도 해요</label>
+                </div>
+
+                <button class="btn btn-primary" id="btn-to-step4">다음 단계로</button>
+                <button class="btn btn-back" id="btn-back-to-2">이전 단계로</button>
+            </div>
+
+            <!-- Step 4: Terms -->
+            <div id="step-4" class="step">
+                <h1>약관 동의</h1>
+                <p class="auth-sub">원활한 서비스 이용을 위해 동의가 필요합니다</p>
+
+                <div class="auth-terms-group">
+                    <label class="auth-term-item">
+                        <input type="checkbox" id="term-required">
+                        <span>(필수) 이용약관 및 개인정보처리방침 동의</span>
+                        <a href="#" class="auth-term-link">보기</a>
+                    </label>
+                    <label class="auth-term-item">
+                        <input type="checkbox" id="term-optional">
+                        <span>(선택) 이벤트 및 학습 팁 알림 받기</span>
+                    </label>
+                </div>
+
+                <button class="btn btn-primary" id="btn-to-step5" disabled>가입 완료하기</button>
+                <button class="btn btn-back" id="btn-back-to-3">이전 단계로</button>
+            </div>
+
+            <!-- Step 5: Welcome -->
+            <div id="step-5" class="step">
+                <span class="auth-welcome-img">🌱</span>
+                <h1>환영해요, <span id="user-nickname">사용자</span>님!</h1>
+                <p class="auth-sub">가입 축하 선물로<br>첫 학습 카드 10개를 드렸어요!</p>
+
+                <button class="btn btn-primary" id="btn-start-learning">홈으로 이동하기 →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let currentStep = 1;
+        const totalSteps = 5;
+        const userData = {
+            nickname: '',
+            email: '',
+            lang: '',
+            goals: [],
+            level: ''
+        };
+
+        // --- DOM Elements ---
+        const progressFill = document.getElementById('progress-fill');
+        const steps = document.querySelectorAll('.step');
+
+        // --- Utility ---
+        function updateStep(step) {
+            currentStep = step;
+            steps.forEach(s => s.classList.remove('active'));
+            document.getElementById(`step-${step}`).classList.add('active');
+
+            // Update progress bar
+            const percentage = (step / totalSteps) * 100;
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        // --- Step 1: Social Login Logic ---
+        function initStep1() {
+            const isJapanese = navigator.language.startsWith('ja');
+            const buttonsKR = [
+                { id: 'kakao', label: '카카오로 시작하기', cls: 'btn-kakao' },
+                { id: 'google', label: 'Google로 계속하기', cls: 'btn-social' },
+                { id: 'apple', label: 'Apple로 계속하기', cls: 'btn-social' },
+            ];
+            const buttonsJP = [
+                { id: 'line', label: 'LINEではじめる', cls: 'btn-line' },
+                { id: 'google', label: 'Googleで続ける', cls: 'btn-social' },
+                { id: 'apple', label: 'Appleで続ける', cls: 'btn-social' },
+            ];
+
+            const list = isJapanese ? buttonsJP : buttonsKR;
+            const container = document.getElementById('social-buttons');
+
+            list.forEach(btn => {
+                const el = document.createElement('button');
+                el.className = `btn ${btn.cls}`;
+                el.textContent = btn.label;
+                el.onclick = () => {
+                    console.log(`${btn.id} social login flow`);
+                    // Social login usually skips to Step 3
+                    updateStep(3);
+                };
+                container.appendChild(el);
+            });
+
+            document.documentElement.lang = isJapanese ? 'ja' : 'ko';
+        }
+
+        // --- Step 2: Basic Info Logic ---
+        function initStep2() {
+            const idInput = document.getElementById('input-id');
+            const nicknameInput = document.getElementById('input-nickname');
+            const emailInput = document.getElementById('input-email');
+            const pwInput = document.getElementById('input-pw');
+            const pwConfirmInput = document.getElementById('input-pw-confirm');
+            const togglePw = document.getElementById('toggle-pw');
+
+            // Password visibility toggle
+            togglePw.onclick = () => {
+                const type = pwInput.type === 'password' ? 'text' : 'password';
+                pwInput.type = type;
+                pwConfirmInput.type = type;
+                togglePw.textContent = type === 'password' ? '👁' : '🙈';
+            };
+
+            // Simple Debounce for Nickname Check
+            let nicknameTimeout;
+            nicknameInput.oninput = () => {
+                clearTimeout(nicknameTimeout);
+                nicknameTimeout = setTimeout(() => {
+                    if(nicknameInput.value.length > 1) {
+                        // Mocking API check
+                        const isDuplicate = nicknameInput.value === 'admin';
+                        document.getElementById('error-nickname').style.display = isDuplicate ? 'flex' : 'none';
+                    }
+                }, 500);
+            };
+
+            document.getElementById('btn-to-step3').onclick = () => {
+                // Validation
+                let isValid = true;
+
+                if(idInput.value.length < 4) {
+                    document.getElementById('error-id').textContent = '아이디는 4자 이상이어야 합니다.';
+                    document.getElementById('error-id').style.display = 'flex';
+                    isValid = false;
+                }
+                if(nicknameInput.value.length < 2) {
+                    document.getElementById('error-nickname').textContent = '닉네임을 입력해주세요.';
+                    document.getElementById('error-nickname').style.display = 'flex';
+                    isValid = false;
+                }
+                if(!emailInput.value.includes('@')) {
+                    document.getElementById('error-email').style.display = 'flex';
+                    isValid = false;
+                }
+                if(pwInput.value.length < 8) {
+                    document.getElementById('error-pw').style.display = 'flex';
+                    isValid = false;
+                }
+                if(pwInput.value !== pwConfirmInput.value) {
+                    document.getElementById('error-pw-confirm').style.display = 'flex';
+                    isValid = false;
+                }
+
+                if(isValid) {
+                    userData.id = idInput.value;
+                    userData.nickname = nicknameInput.value;
+                    userData.email = emailInput.value;
+                    updateStep(3);
+                }
+            };
+        }
+
+        // --- Step 3: Language & Goals Logic ---
+        function initStep3() {
+            const langCards = document.querySelectorAll('.select-card');
+            langCards.forEach(card => {
+                card.onclick = () => {
+                    langCards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    userData.lang = card.dataset.lang;
+                };
+            });
+
+            const tags = document.querySelectorAll('.tag');
+            tags.forEach(tag => {
+                tag.onclick = () => {
+                    tag.classList.toggle('selected');
+                    const goalText = tag.textContent;
+                    if(userData.goals.includes(goalText)) {
+                        userData.goals = userData.goals.filter(g => g !== goalText);
+                    } else {
+                        userData.goals.push(goalText);
+                    }
+                };
+            });
+
+            document.getElementById('btn-to-step4').onclick = () => {
+                if(!userData.lang) {
+                    alert('학습할 언어를 선택해주세요!');
+                    return;
+                }
+                updateStep(4);
+            };
+        }
+
+        // --- Step 4: Terms Logic ---
+        function initStep4() {
+            const requiredTerm = document.getElementById('term-required');
+            const nextBtn = document.getElementById('btn-to-step5');
+
+            requiredTerm.onchange = () => {
+                nextBtn.disabled = !requiredTerm.checked;
+            };
+
+            nextBtn.onclick = () => {
+                // Use nickname from Step 2 or default for social
+                const finalNick = userData.nickname || '새내기';
+                document.getElementById('user-nickname').textContent = finalNick;
+                updateStep(5);
+            };
+        }
+
+        // --- Step 5: Completion ---
+        function initStep5() {
+            document.getElementById('btn-start-learning').onclick = () => {
+                window.location.href = 'index.html';
+            };
+        }
+
+        // --- Global Listeners ---
+        document.getElementById('email-signup-link').onclick = () => {
+            updateStep(2);
+        };
+
+        // Back button listeners
+        document.getElementById('btn-back-to-1').onclick = () => updateStep(1);
+        document.getElementById('btn-back-to-2').onclick = () => updateStep(2);
+        document.getElementById('btn-back-to-3').onclick = () => updateStep(3);
+
+        // Initialize all
+        window.onload = () => {
+            initStep1();
+            initStep2();
+            initStep3();
+            initStep4();
+            initStep5();
+        };
+    </script>
+</body>
+</html>
