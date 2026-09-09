@@ -29,9 +29,9 @@ python3 -m http.server 8000
 | `styles.css` | 공통 스타일 + `:root` 디자인 토큰 (`--bg-color`, `--accent-color` 등) |
 | `auth.css` | 인증 페이지(login/logout/sign_up/forgot-password) 공통 스타일 (`auth-*` 클래스). `styles.css` 뒤에 로드 |
 | `words.json` | 단어 데이터 소스 |
-| `kanji-writer-demo.html` / `KANJI_WRITER_GUIDE.md` | 한자 연습용 데모/가이드 문서 (루트에 위치) |
+| `kanji-writer-demo.html` | 한자 연습용 데모 (루트에 위치) |
 | `main.py` | 백엔드 골격 자리 (`print('hello world')`만 존재) |
-| `upgrade_plan.md` / `plans/` | 구현·미래 개선 계획 문서 (SRS 알고리즘, DB, 구독 등은 계획만 존재) |
+| `plans/` | 기획·가이드 문서 (회원가입 기획서, KANJI_WRITER_GUIDE, 업그레이드 플랜). git 추적 안 함 |
 | `images/` | ✓/✗ 버튼 PNG, 콘텐츠 썸네일 등 (문서 파일 없음) |
 
 ## 데이터 흐름
@@ -65,7 +65,7 @@ python3 -m http.server 8000
 - `main.py`가 비어 있고 로그인·회원가입은 모두 프런트 훼이크로만 동작 (DB/세션 없음). 계획은 `upgrade_plan.md`에 정리됨.
 - 인증 페이지(login/logout/sign_up/forgot-password)는 `styles.css` + `auth.css`만 로드하며 인라인 `<style>` 없음. 배경 그린 `--bg-color` 상속, navbar 없음(집중형 레이아웃 유지). sign_up은 JS가 참조하는 `.step`/`.select-card`/`.tag`/`.btn` 클래스명을 유지해야 한다.
 - `scripts.js`는 학습 페이지와 대시보드 로직이 한 파일에 공존하며, `#flashcard-container` 존재 여부로 분기한다. `#category-select` 요소가 없으므로 해당 리스너는 null 가드로 감싸져 있다 (키보드/스와이프의 하위 등록을 지키기 위함).
-- `.DS_Store`, `test.txt`, `test_tag.html`은 git에서 제거·무시 처리됨 (`.gitignore` 참고). `plans/`·`upgrade_plan.md`는 커밋되어 추적 중이지만 `.gitignore`에도 명시되어 있어 혼동 주의.
+- `.DS_Store`, `test.txt`, `test_tag.html`은 git에서 제거·무시 처리됨 (`.gitignore` 참고). `plans/`의 문서(회원가입 기획서, KANJI_WRITER_GUIDE, 업그레이드 플랜)는 git 추적 없이 로컬에서만 유지되며 `.gitignore`로 보호된다.
 - `login.html`의 회원가입 버튼은 `sign_up.html`을, 비밀번호 찾기는 `forgot-password.html`을 가리킨다.
 
 ## 커밋 컨벤션
