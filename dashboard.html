@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학습 대시보드 - FlashCard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Global Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Dashboard Specific Styles that aren't in global styles.css */
+        .dashboard-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .tree-level-block {
+            background: var(--secondary-color);
+            border: none;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: var(--deep-green);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .progress-track {
+            height: 10px;
+            background: var(--line-color);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0 5px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-color);
+            transition: width 0.5s ease-out;
+        }
+        .user-info-block {
+            background: var(--card-bg);
+            border: 1px solid var(--line-color);
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .summary-block {
+            background: var(--card-bg);
+            border: 1px solid var(--line-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .skill-row {
+            margin-bottom: 12px;
+        }
+        .skill-row-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+        .skill-bar-track {
+            height: 8px;
+            background: var(--line-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .recent-activity-block {
+            background: var(--card-bg);
+            border: 1px solid var(--line-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line-color);
+            font-size: 0.9rem;
+        }
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar (Same as index.html) -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">FlashCard</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link " href="index.html">홈</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="card_deck.html">콘텐츠 선택</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="flash_card.html">단어 학습하기</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="kanji_deck.html">한자 학습하기</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="dashboard.html">학습 대시보드</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="flash_card.html?mode=wrong">오답 노트</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="sign_up.html">회원가입</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.html">로그인</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.html">로그아웃</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    <main id="main-content" class="content-section">
+        <div class="dashboard-container w-100">
+            <!-- Tree Level Block -->
+            <section class="tree-level-block mb-4">
+                <div id="tree-visual" style="font-size:80px; margin-bottom:10px;"></div>
+                <h4 id="tree-stage-label" class="fw-bold mb-1"></h4>
+                <div class="progress-track">
+                    <div class="progress-fill" id="tree-progress"></div>
+                </div>
+                <p id="tree-progress-label" class="small mb-0 opacity-75"></p>
+            </section>
+
+            <!-- User Info Block -->
+            <section class="user-info-block">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: bold;">
+                            👤
+                        </div>
+                    </div>
+                    <div>
+                        <p id="user-name" class="mb-0 fw-bold" style="font-size: 1.1rem;"></p>
+                        <p id="user-email" class="mb-0 small text-muted"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary Block -->
+            <section class="summary-block">
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="card h-100 border-0 shadow-sm p-3 stat-card bg-light text-center">
+                            <p class="stat-label small text-muted mb-1">연속 학습</p>
+                            <p class="stat-value fw-bold mb-0" id="streak-value" style="font-size: 1.5rem; color: var(--deep-green);"></p>
+                            <p class="stat-sub x-small text-muted mb-0" id="streak-sub" style="font-size: 0.75rem;"></p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card h-100 border-0 shadow-sm p-3 stat-card bg-light text-center">
+                            <p class="stat-label small text-muted mb-1">누적 학습 단어</p>
+                            <p class="stat-value fw-bold mb-0" id="total-words-value" style="font-size: 1.5rem; color: var(--deep-green);"></p>
+                            <p class="stat-sub x-small text-muted mb-0" id="total-words-sub" style="font-size: 0.75rem;"></p>
+                        </div>
+                    </div>
+                </div>
+                <div id="skill-breakdown">
+                    <!-- Skills will be injected here -->
+                </div>
+            </section>
+
+            <!-- Recent Activity Block -->
+            <section class="recent-activity-block">
+                <h5 class="fw-bold mb-3" style="font-size: 1rem; color: var(--deep-green);">최근 학습 내역</h5>
+                <div id="activity-list">
+                    <!-- Activities will be injected here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const userDashboardData = {
+            user: {
+                name: "김지성",
+                email: "jisung@example.com",
+            },
+            level: {
+                currentLevel: 7,
+                growthStage: 2,
+                growthPoint: 620,
+                nextStageThreshold: 1000,
+            },
+            streak: {
+                currentStreakDays: 12,
+                thisWeekDaysStudied: 5,
+            },
+            totalWords: {
+                total: 482,
+                thisWeekGain: 34,
+            },
+            skills: [
+                { label: "한자", percent: 72 },
+                { label: "어휘", percent: 58 },
+                { label: "듣기", percent: 41 },
+                { label: "문법", percent: 25 },
+            ],
+            recentActivity: [
+                { date: "2026-09-09", content: "N4 조사 복습 세트", result: "완료" },
+                { date: "2026-09-08", content: "한자 획순 연습 - 학교/학생", result: "완료" },
+                { date: "2026-09-07", content: "일상 회화 플래시카드 20개", result: "완료" },
+            ],
+        };
+
+        const treeAssets = ["🌰", "🌱", "🌿", "🌳", "🌸"];
+        const stageLabels = ["씨앗", "새싹", "어린 나무", "무성한 나무", "만개한 나무"];
+
+        function renderTreeLevel(levelData) {
+            document.getElementById("tree-visual").textContent = treeAssets[levelData.growthStage];
+            document.getElementById("tree-stage-label").textContent =
+                `${stageLabels[levelData.growthStage]} · Lv.${levelData.currentLevel}`;
+
+            const percent = Math.min(100, Math.round((levelData.growthPoint / levelData.nextStageThreshold) * 100));
+            document.getElementById("tree-progress").style.width = percent + "%";
+            document.getElementById("tree-progress-label").textContent = `다음 단계까지 ${percent}%`;
+        }
+
+        function renderUserInfo(user) {
+            document.getElementById("user-name").textContent = user.name;
+            document.getElementById("user-email").textContent = user.email;
+        }
+
+        function renderSummary(data) {
+            document.getElementById("streak-value").textContent = `${data.streak.currentStreakDays}일`;
+            document.getElementById("streak-sub").textContent = `이번 주 ${data.streak.thisWeekDaysStudied}/7일 학습`;
+
+            document.getElementById("total-words-value").textContent = `${data.totalWords.total}개`;
+            document.getElementById("total-words-sub").textContent = `이번 주 +${data.totalWords.thisWeekGain}개`;
+
+            const container = document.getElementById("skill-breakdown");
+            container.innerHTML = "";
+            data.skills.forEach((skill) => {
+                const color = skill.percent >= 70 ? "var(--deep-green)" : skill.percent >= 40 ? "#E8A33D" : "#D85A30";
+                const row = document.createElement("div");
+                row.className = "skill-row";
+                row.innerHTML = `
+                    <div class="skill-row-top"><span>${skill.label}</span><span>${skill.percent}%</span></div>
+                    <div class="skill-bar-track"><div style="height:100%; width:${skill.percent}%; background:${color};"></div></div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function renderRecentActivity(activities) {
+            const list = document.getElementById("activity-list");
+            list.innerHTML = "";
+            activities.forEach((item) => {
+                const div = document.createElement("div");
+                div.className = "activity-item";
+                div.innerHTML = `<span>${item.content}</span><span class="text-muted" style="font-size: 0.8rem;">${item.date}</span>`;
+                list.appendChild(div);
+            });
+        }
+
+        function initDashboard(data) {
+            renderTreeLevel(data.level);
+            renderUserInfo(data.user);
+            renderSummary(data);
+            renderRecentActivity(data.recentActivity);
+        }
+
+        initDashboard(userDashboardData);
+    </script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
