@@ -26,6 +26,22 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     });
 
+                    // Create Marquee Track
+                    const track = document.createElement("div");
+                    track.className = "marquee-track";
+
+                    // 1. Add "All Sets" Card First
+                    const allItem = document.createElement("div");
+                    allItem.className = "set-card-item";
+                    allItem.innerHTML = `
+                        <div class="set-card" data-set="all">
+                            <div class="set-card-title">전체 세트</div>
+                            <div class="set-card-count">${data.length}단어</div>
+                        </div>
+                    `;
+                    track.appendChild(allItem);
+
+                    // 2. Create Other Set Cards
                     Object.entries(setMap).forEach(([setName, count]) => {
                         const item = document.createElement("div");
                         item.className = "set-card-item";
@@ -37,24 +53,33 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="set-card-title">${setName}</div>
                             <div class="set-card-count">${count}단어</div>
                         `;
-                        card.addEventListener("click", () => {
-                            window.location.href = `flash_card.html?set=${encodeURIComponent(setName)}`;
-                        });
 
                         item.appendChild(card);
-                        setCards.appendChild(item);
+                        track.appendChild(item);
                     });
+
+                    // 3. Clone cards for seamless loop
+                    const clones = track.innerHTML;
+                    track.innerHTML += clones;
+
+                    // 4. Use Event Delegation for clicks
+                    track.addEventListener("click", (e) => {
+                        const card = e.target.closest(".set-card");
+                        if (card) {
+                            const setName = card.dataset.set;
+                            if (setName === "all") {
+                                window.location.href = "flash_card.html?mode=all";
+                            } else {
+                                window.location.href = `flash_card.html?set=${encodeURIComponent(setName)}`;
+                            }
+                        }
+                    });
+
+                    setCards.appendChild(track);
                 }
             })
             .catch((error) =>
                 console.error("Error fetching words for stats:", error),
             );
-    }
-
-    const allCard = setCards ? setCards.querySelector('[data-set="all"]') : null;
-    if (allCard) {
-        allCard.addEventListener("click", () => {
-            window.location.href = "flash_card.html?mode=all";
-        });
     }
 });

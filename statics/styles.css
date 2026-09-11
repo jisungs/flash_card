@@ -68,13 +68,34 @@ body {
 }
 
 .set-cards-scroll {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding: 10px 0 20px;
+}
+
+.marquee-track {
     display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    gap: 16px;
-    padding: 10px 40px 20px;
-    justify-content: center;
+    gap: 20px;
+    width: max-content;
+    animation: scroll-marquee 30s linear infinite;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.set-card-item {
+    flex-shrink: 0;
+}
+
+@keyframes scroll-marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 .set-cards-scroll::-webkit-scrollbar {
