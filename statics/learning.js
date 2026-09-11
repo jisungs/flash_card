@@ -1,84 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // --- Common Logic ---
-    const safeParseJSON = (key, defaultValue) => {
-        try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : defaultValue;
-        } catch (e) {
-            console.error(`Error parsing localStorage key ${key}:`, e);
-            return defaultValue;
-        }
-    };
-
-    let knownWords = safeParseJSON("knownWords", []);
-    let unknownWords = safeParseJSON("unknownWords", []);
-
-    // --- Dashboard Logic (index.html) ---
-    const statTotal = document.getElementById("stat-total");
-    const statMastered = document.getElementById("stat-mastered");
-    const statWrong = document.getElementById("stat-wrong");
-    const setCards = document.getElementById("set-cards");
-    const setCountAll = document.getElementById("set-count-all");
-
-    if (statTotal && statMastered && statWrong) {
-        fetch("words.json")
-            .then((response) => response.json())
-            .then((data) => {
-                const total = data.length;
-                statTotal.textContent = total;
-                statMastered.textContent = knownWords.length;
-                statWrong.textContent = unknownWords.length;
-
-                // 전체 세트 단어 수 표시
-                if (setCountAll) {
-                    setCountAll.textContent = `${total}단어`;
-                }
-
-                // 세트 목록 동적 카드 생성
-                if (setCards) {
-                    const setMap = {};
-                    data.forEach((word) => {
-                        if (word.set) {
-                            setMap[word.set] = (setMap[word.set] || 0) + 1;
-                        }
-                    });
-
-                    Object.entries(setMap).forEach(([setName, count]) => {
-                        const item = document.createElement("div");
-                        item.className = "set-card-item";
-
-                        const card = document.createElement("div");
-                        card.className = "set-card";
-                        card.dataset.set = setName;
-                        card.innerHTML = `
-                            <div class="set-card-title">${setName}</div>
-                            <div class="set-card-count">${count}단어</div>
-                        `;
-                        card.addEventListener("click", () => {
-                            window.location.href = `flash_card.html?set=${encodeURIComponent(setName)}`;
-                        });
-
-                        item.appendChild(card);
-                        setCards.appendChild(item);
-                    });
-                }
-            })
-            .catch((error) =>
-                console.error("Error fetching words for stats:", error),
-            );
-    }
-
-    // 전체 세트 카드 클릭 이벤트
-    const allCard = setCards ? setCards.querySelector('[data-set="all"]') : null;
-    if (allCard) {
-        allCard.addEventListener("click", () => {
-            window.location.href = "flash_card.html?mode=all";
-        });
-    }
-
-    // --- Learning Logic (flash_card.html) ---
     const container = document.getElementById("flashcard-container");
-    if (!container) return; // exit if not on learning page
+    if (!container) return;
 
     const card = document.querySelector(".flashcard");
     const front = card.querySelector(".front");
@@ -98,61 +20,45 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentIndex = 0;
     let currentCategory = "all";
     let currentSet = "all";
-    let currentContent = "all"; // 추가
+    let currentContent = "all";
 
-    // URL 파라미터 확인 (예: ?mode=wrong, ?set=기초 일본어, ?content=drama_01)
     const urlParams = new URLSearchParams(window.location.search);
     const mode = urlParams.get("mode");
     const setParam = urlParams.get("set");
-    const contentParam = urlParams.get("content"); // 추가
+    const contentParam = urlParams.get("content");
 
-    if (mode) {
-        currentCategory = mode;
-    }
-    if (setParam) {
-        currentSet = setParam;
-    }
-    if (contentParam) {
-        // 추가
-        currentContent = contentParam;
-    }
+    if (mode) currentCategory = mode;
+    if (setParam) currentSet = setParam;
+    if (contentParam) currentContent = contentParam;
 
     fetch("words.json")
         .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
+            if (!response.ok) throw new Error("Network response was not ok");
             return response.json();
         })
         .then((data) => {
             allWords = data;
-            applyFilter(); // 초기 필터링 적용
+            applyFilter();
         })
         .catch((error) => {
             console.error("Error fetching words:", error);
-            container.innerHTML =
-                "<p>Failed to load words. Please ensure you are running this via a web server.</p>";
+            container.innerHTML = "<p>Failed to load words. Please ensure you are running this via a web server.</p>";
         });
 
     function applyFilter() {
-        // 1. 먼저 세트(Set) 필터링 적용
         let baseWords = allWords;
         if (currentSet !== "all") {
             baseWords = allWords.filter((word) => word.set === currentSet);
         }
 
-        // 2. 콘텐츠(Content) 필터링 적용 (추가)
         if (currentContent !== "all") {
-            baseWords = baseWords.filter(
-                (word) => word.contentId === currentContent,
-            );
+            baseWords = baseWords.filter((word) => word.contentId === currentContent);
         }
 
-        // 3. 선택된 카테고리(Category)에 따라 filteredWords 업데이트
         if (currentCategory === "all") {
             filteredWords = baseWords.map((word, index) => ({
                 ...word,
-                id: allWords.indexOf(word), // 원본 allWords의 인덱스를 id로 사용
+                id: allWords.indexOf(word),
             }));
         } else if (currentCategory === "wrong") {
             filteredWords = baseWords
@@ -168,22 +74,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 .map((word) => ({ ...word, id: allWords.indexOf(word) }));
         }
 
-        currentIndex = 0; // 카테고리 변경 시 첫 번째 카드로 
+        currentIndex = 0;
         updateCard();
     }
 
     function shuffleWords() {
         if (filteredWords.length === 0) return;
-
-        // Fisher-Yates Shuffle Algorithm
         for (let i = filteredWords.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [filteredWords[i], filteredWords[j]] = [
-                filteredWords[j],
-                filteredWords[i],
-            ];
+            [filteredWords[i], filteredWords[j]] = [filteredWords[j], filteredWords[i]];
         }
-
         currentIndex = 0;
         updateCard();
     }
@@ -196,29 +96,18 @@ document.addEventListener("DOMContentLoaded", () => {
             progressBar.style.width = "0%";
             return;
         }
-
-        // Update text
         front.textContent = filteredWords[currentIndex].front;
         backText.textContent = filteredWords[currentIndex].back;
-
-        // Reset flip state
         card.classList.remove("flipped");
-
-        // Update progress display
         progress.textContent = `${currentIndex + 1} / ${filteredWords.length}`;
-
-        // Update progress bar width
         const percentage = ((currentIndex + 1) / filteredWords.length) * 100;
         progressBar.style.width = `${percentage}%`;
     }
 
     function showCompletionModal() {
         const total = filteredWords.length;
-        const knownCount = filteredWords.filter((word) =>
-            knownWords.includes(word.id),
-        ).length;
+        const knownCount = filteredWords.filter((word) => knownWords.includes(word.id)).length;
         const accuracy = total > 0 ? Math.round((knownCount / total) * 100) : 0;
-
         completionMessage.textContent = `총 ${total}개의 단어 중 ${knownCount}개를 마스터했습니다! (정확도: ${accuracy}%)`;
         completionModal.classList.add("show");
     }
@@ -233,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function markWord(isCorrect) {
         const wordId = filteredWords[currentIndex].id;
-
         if (isCorrect) {
             if (!knownWords.includes(wordId)) knownWords.push(wordId);
             unknownWords = unknownWords.filter((id) => id !== wordId);
@@ -241,11 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!unknownWords.includes(wordId)) unknownWords.push(wordId);
             knownWords = knownWords.filter((id) => id !== wordId);
         }
-
-        localStorage.setItem("knownWords", JSON.stringify(knownWords));
-        localStorage.setItem("unknownWords", JSON.stringify(unknownWords));
-
-        // Mark 후 자동으로 다음 카드로 이동
+        Storage.saveWords(knownWords, unknownWords);
         nextBtn.click();
     }
 
@@ -263,17 +147,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     prevBtn.addEventListener("click", () => {
         if (filteredWords.length === 0) return;
-        currentIndex =
-            (currentIndex - 1 + filteredWords.length) % filteredWords.length;
+        currentIndex = (currentIndex - 1 + filteredWords.length) % filteredWords.length;
         updateCard();
     });
 
     nextBtn.addEventListener("click", () => {
         if (filteredWords.length === 0) return;
-
         if (currentIndex === filteredWords.length - 1) {
             showCompletionModal();
-            currentIndex = 0; // 리셋
+            currentIndex = 0;
         } else {
             currentIndex = (currentIndex + 1) % filteredWords.length;
         }
@@ -282,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     closeModal.addEventListener("click", () => {
         completionModal.classList.remove("show");
-        applyFilter(); // 리셋 및 재시작
+        applyFilter();
     });
 
     if (categorySelect) {
@@ -292,50 +174,34 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Keyboard Navigation
     window.addEventListener("keydown", (e) => {
         switch (e.key) {
-            case "ArrowLeft":
-                prevBtn.click();
-                break;
-            case "ArrowRight":
-                nextBtn.click();
-                break;
+            case "ArrowLeft": prevBtn.click(); break;
+            case "ArrowRight": nextBtn.click(); break;
             case " ":
             case "Enter":
-                e.preventDefault(); // Space key scroll prevention
+                e.preventDefault();
                 card.click();
                 break;
         }
     });
 
-    // === 스와이프 제스처 (모바일 터치 지원) ===
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
+    let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
     const SWIPE_THRESHOLD = 50;
-
     if (container) {
         container.addEventListener("touchstart", (e) => {
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
-
         container.addEventListener("touchend", (e) => {
             touchEndX = e.changedTouches[0].screenX;
             touchEndY = e.changedTouches[0].screenY;
-
             const deltaX = touchEndX - touchStartX;
             const deltaY = touchEndY - touchStartY;
-
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
                 if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
-                    if (deltaX < 0) {
-                        nextBtn.click();
-                    } else {
-                        prevBtn.click();
-                    }
+                    if (deltaX < 0) nextBtn.click();
+                    else prevBtn.click();
                 }
             }
         }, { passive: true });
