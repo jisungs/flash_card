@@ -11,7 +11,7 @@
     <style>
         /* Dashboard Specific Styles that aren't in global styles.css */
         .dashboard-container {
-            max-width: 600px;
+            width: 100%;
             margin: 0 auto;
         }
         .tree-level-block {
@@ -84,6 +84,18 @@
         .activity-item:last-child {
             border-bottom: none;
         }
+
+        @media (min-width: 768px) {
+            .tree-level-block {
+                padding: 40px;
+            }
+            #tree-visual {
+                font-size: 100px !important;
+            }
+            .summary-block, .recent-activity-block {
+                padding: 30px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -129,62 +141,70 @@
         </nav>
 
     <main id="main-content" class="content-section">
-        <div class="dashboard-container w-100">
-            <!-- Tree Level Block -->
-            <section class="tree-level-block mb-4">
-                <div id="tree-visual" style="font-size:80px; margin-bottom:10px;"></div>
-                <h4 id="tree-stage-label" class="fw-bold mb-1"></h4>
-                <div class="progress-track">
-                    <div class="progress-fill" id="tree-progress"></div>
-                </div>
-                <p id="tree-progress-label" class="small mb-0 opacity-75"></p>
-            </section>
-
-            <!-- User Info Block -->
-            <section class="user-info-block">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0 me-3">
-                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: bold;">
-                            👤
+        <div class="container py-4">
+            <div class="row g-4">
+                <!-- Left Column: Identity & Growth -->
+                <div class="col-12 col-md-5">
+                    <!-- Tree Level Block -->
+                    <section class="tree-level-block mb-4">
+                        <div id="tree-visual" style="font-size:80px; margin-bottom:10px;"></div>
+                        <h4 id="tree-stage-label" class="fw-bold mb-1"></h4>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="tree-progress"></div>
                         </div>
-                    </div>
-                    <div>
-                        <p id="user-name" class="mb-0 fw-bold" style="font-size: 1.1rem;"></p>
-                        <p id="user-email" class="mb-0 small text-muted"></p>
-                    </div>
-                </div>
-            </section>
+                        <p id="tree-progress-label" class="small mb-0 opacity-75"></p>
+                    </section>
 
-            <!-- Summary Block -->
-            <section class="summary-block">
-                <div class="row g-3 mb-4">
-                    <div class="col-6">
-                        <div class="card h-100 border-0 shadow-sm p-3 stat-card bg-light text-center">
-                            <p class="stat-label small text-muted mb-1">연속 학습</p>
-                            <p class="stat-value fw-bold mb-0" id="streak-value" style="font-size: 1.5rem; color: var(--deep-green);"></p>
-                            <p class="stat-sub x-small text-muted mb-0" id="streak-sub" style="font-size: 0.75rem;"></p>
+                    <!-- User Info Block -->
+                    <section class="user-info-block">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-weight: bold;">
+                                    👤
+                                </div>
+                            </div>
+                            <div>
+                                <p id="user-name" class="mb-0 fw-bold" style="font-size: 1.1rem;"></p>
+                                <p id="user-email" class="mb-0 small text-muted"></p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="card h-100 border-0 shadow-sm p-3 stat-card bg-light text-center">
-                            <p class="stat-label small text-muted mb-1">누적 학습 단어</p>
-                            <p class="stat-value fw-bold mb-0" id="total-words-value" style="font-size: 1.5rem; color: var(--deep-green);"></p>
-                            <p class="stat-sub x-small text-muted mb-0" id="total-words-sub" style="font-size: 0.75rem;"></p>
-                        </div>
-                    </div>
+                    </section>
                 </div>
-                <div id="skill-breakdown">
-                    <!-- Skills will be injected here -->
-                </div>
-            </section>
 
-            <!-- Recent Activity Block -->
-            <section class="recent-activity-block">
-                <h5 class="fw-bold mb-3" style="font-size: 1rem; color: var(--deep-green);">최근 학습 내역</h5>
-                <div id="activity-list">
-                    <!-- Activities will be injected here -->
+                <!-- Right Column: Stats & Activity -->
+                <div class="col-12 col-md-7">
+                    <!-- Summary Block -->
+                    <section class="summary-block">
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <div class="card h-100 border-0 shadow-sm p-3 stat-card bg-light text-center">
+                                    <p class="stat-label small text-muted mb-1">연속 학습</p>
+                                    <p class="stat-value fw-bold mb-0" id="streak-value" style="font-size: 1.5rem; color: var(--deep-green);"></p>
+                                    <p class="stat-sub x-small text-muted mb-0" id="streak-sub" style="font-size: 0.75rem;"></p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card h-100 border-0 shadow-sm p-3 stat-card bg-light text-center">
+                                    <p class="stat-label small text-muted mb-1">누적 학습 단어</p>
+                                    <p class="stat-value fw-bold mb-0" id="total-words-value" style="font-size: 1.5rem; color: var(--deep-green);"></p>
+                                    <p class="stat-sub x-small text-muted mb-0" id="total-words-sub" style="font-size: 0.75rem;"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="skill-breakdown">
+                            <!-- Skills will be injected here -->
+                        </div>
+                    </section>
+
+                    <!-- Recent Activity Block -->
+                    <section class="recent-activity-block">
+                        <h5 class="fw-bold mb-3" style="font-size: 1rem; color: var(--deep-green);">최근 학습 내역</h5>
+                        <div id="activity-list">
+                            <!-- Activities will be injected here -->
+                        </div>
+                    </section>
                 </div>
-            </section>
+            </div>
         </div>
     </main>
 
